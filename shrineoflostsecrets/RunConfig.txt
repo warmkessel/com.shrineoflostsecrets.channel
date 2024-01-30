@@ -1,0 +1,9 @@
+clean eclipse:clean eclipse:eclipse
+clean install
+clean install appengine:run
+clean install appengine:deploy
+clean install exec:java
+
+
+twitch configure -i ya3olz9mnmbw19lnucg8hbswqmsycw -s c2lof46ndfojx7pi56sttmp1gttffv
+twitch token -u -s user:write:chat user:read:chat
