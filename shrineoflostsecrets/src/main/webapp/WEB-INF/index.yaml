@@ -5,3 +5,4 @@ indexes:
       - name: EventType      
       - name: TwitchChannel
       - name: CreatedDate
+        direction: desc

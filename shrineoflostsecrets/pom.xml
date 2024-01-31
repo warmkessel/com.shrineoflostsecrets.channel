@@ -213,7 +213,7 @@
 					</execution>
 				</executions>
 			</plugin>
-						<plugin>
+			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
 				<version>3.0.0</version>
@@ -225,7 +225,8 @@
 					</execution>
 				</executions>
 				<configuration>
-					<mainClass>com.shrineoflostsecrets.channel.collector.Launcher</mainClass>
+					<mainClass>
+						com.shrineoflostsecrets.channel.collector.Launcher</mainClass>
 					<!-- Arguments can be added here if needed -->
 					<!-- <arguments> -->
 					<!--     <argument>arg1</argument> -->

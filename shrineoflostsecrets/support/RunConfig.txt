@@ -7,3 +7,6 @@ clean install exec:java
 
 twitch configure -i ya3olz9mnmbw19lnucg8hbswqmsycw -s c2lof46ndfojx7pi56sttmp1gttffv
 twitch token -u -s user:write:chat user:read:chat
+
+
+https://www.oracle.com/webapps/redirect/signon?nexturl=https://download.oracle.com/otn/java/jdk/11.0.21%2B9/8819d0447e4d41b3bd1d9e1007728d17/jdk-11.0.21_linux-x64_bin.tar.gz
