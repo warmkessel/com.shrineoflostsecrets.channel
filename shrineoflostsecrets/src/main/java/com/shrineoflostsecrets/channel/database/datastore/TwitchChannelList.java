@@ -13,7 +13,7 @@ import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 
 public class TwitchChannelList{
 	
-	public static List<Entity> listChanels() {
+	public static List<Entity> listChannels() {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
 //				Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNEL)

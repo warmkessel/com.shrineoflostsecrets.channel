@@ -1,7 +1,7 @@
 indexes:
-- kind: ShrineChannelEvent
-  properties:
-  - name: Deleted
-  - name: EventType
-  - name: TwitchChannel
-  - name: CreatedDate
+  - kind: ShrineChannelEvent
+    properties:
+      - name: Deleted
+      - name: EventType      
+      - name: TwitchChannel
+      - name: CreatedDate

@@ -10,8 +10,8 @@
 <body>
 <table>
 
-<% 
-    	List<Entity> listChanels = TwitchChannelList.listChanels();
+<%
+List<Entity> listChanels = TwitchChannelList.listChannels();
     	for(Entity entity: listChanels) {
     		ShrineChannel channel = new ShrineChannel();
     		channel.loadFromEntity(entity);

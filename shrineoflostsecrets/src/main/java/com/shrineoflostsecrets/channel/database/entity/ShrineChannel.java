@@ -1,5 +1,8 @@
 package com.shrineoflostsecrets.channel.database.entity;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.shrineoflostsecrets.channel.constants.Constants;
@@ -12,14 +15,13 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 	 * 
 	 */
 	private static final long serialVersionUID = -361472214131790072L;
-	// private static final Logger log = Logger.getLogger(TwitchStream.class.getName());
+	private static final Logger logger = LoggerFactory.getLogger(ShrineChannel.class);
 
 
 	private String twitchChannel = "";
 	private String discordChannel = "";
 	private String discordUserName = "";
 	private String twitchUserName = "";
-
 	private long twitchServiceType = 0;
 
 
@@ -50,21 +52,13 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 		this.twitchChannel = twitchChannel;
 	}
 
-	public String getDiscordStream() {
+	public String getDiscordChannel() {
 		return discordChannel;
 	}
 
-	public void setDiscordStream(String discordUserName) {
-		this.discordUserName = discordUserName;
+	public void setDiscordChannel(String discordUserName) {
+		this.discordChannel = discordUserName;
 	}
-	
-	public void loadTwitchStream(Key key) {
-		// log.info("key " + key.toString());
-		Entity event = getDatastore().get(key);
-		loadFromEntity(event);
-
-	}
-	
 
 	public long getTwitchServiceType() {
 		return twitchServiceType;
@@ -103,7 +97,7 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 		entity.set(TwitchChannelConstants.DELETED, getDeleted())
 				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate()).set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
 				.set(TwitchChannelConstants.TWITCHCHANNEL, getTwitchChannel())
-				.set(TwitchChannelConstants.DISCORDCHANNEL, getDiscordStream())
+				.set(TwitchChannelConstants.DISCORDCHANNEL, getDiscordChannel())
 				.set(TwitchChannelConstants.TWITCHUSERNAME, getTwitchUserName())
 				.set(TwitchChannelConstants.DISCORDUSERNAME, getDiscordUserName())
 				.set(TwitchChannelConstants.TWITCHSERVICETYPE, getTwitchServiceType())
@@ -111,31 +105,28 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 		getDatastore().put(entity.build());
 	}
 
-	public void loadEvent(String key) {
-		loadEvent(Long.parseLong(key));
+	public void loadShrineChannel(String key) {
+		 loadShrineChannel(Long.parseLong(key));
 	}
 
-	public void loadEvent(long key) {
-		loadEvent(Key.newBuilder(Constants.SHRINEOFLOSTSECRETS, TwitchChannelConstants.SHRINECHANNELEVENT, key).build());
+	public void loadShrineChannel(long key) {
+		 loadShrineChannel(Key.newBuilder(Constants.SHRINEOFLOSTSECRETS, TwitchChannelConstants.SHRINECHANNEL, key).build());
 	}
 
-	public void loadEvent(Key key) {
+	public void loadShrineChannel(Key key) {
 		// log.info("key " + key.toString());
 		Entity twitchStream = getDatastore().get(key);
 		loadFromEntity(twitchStream);
-
 	}
 
 	public void loadFromEntity(Entity entity) {
 		super.loadFromEntity(entity);
 		if (null != entity) {
 			setTwitchChannel(entity.getString(TwitchChannelConstants.TWITCHCHANNEL));
-			setDiscordStream(entity.getString(TwitchChannelConstants.DISCORDCHANNEL));
+			setDiscordChannel(entity.getString(TwitchChannelConstants.DISCORDCHANNEL));
 			setTwitchUserName(entity.getString(TwitchChannelConstants.TWITCHUSERNAME));
 			setDiscordUserName(entity.getString(TwitchChannelConstants.DISCORDUSERNAME));
 			setTwitchServiceType(entity.getLong(TwitchChannelConstants.TWITCHSERVICETYPE));
-			
-		
 		}
 	}
 

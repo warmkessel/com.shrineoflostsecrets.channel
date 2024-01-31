@@ -9,9 +9,19 @@
 <html>
 <body>
 <table>
+<%
+  
 
-<% 
-    	List<Entity> listChanels = TwitchChannelEventList.listChanelEvents("sadgirl");
+    String channel = "shrineoflostsecrets";
+    
+    ;
+    if (request.getParameter("channel") != null && !request.getParameter("channel").isEmpty()) {
+    	channel = request.getParameter("channel");
+    }
+    %>
+  <%= channel %>  
+<%
+    	List<Entity> listChanels = TwitchChannelEventList.listChanelEvents("channel");
     			
     	for(Entity entity: listChanels) {
     		ShrineChannelEvent channelEvent = new ShrineChannelEvent();

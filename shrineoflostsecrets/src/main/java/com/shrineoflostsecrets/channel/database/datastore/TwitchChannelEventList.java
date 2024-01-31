@@ -16,7 +16,17 @@ import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 public class TwitchChannelEventList {
 	public static List<Entity> listChanelEvents(String channel) {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
-//
+
+		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
+				.setFilter(CompositeFilter.and(PropertyFilter.eq(TwitchChannelConstants.DELETED, false),
+						PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel), 
+						CompositeFilter.or(
+						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGE),
+						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGEELEVATED),
+						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAAGE)
+						)))
+				.setOrderBy(OrderBy.asc(TwitchChannelConstants.CREATEDDATE)).build();
+		
 //		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
 //				.setFilter(CompositeFilter.and(PropertyFilter.eq(TwitchChannelConstants.DELETED, false),
 //						PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel), 
@@ -26,12 +36,6 @@ public class TwitchChannelEventList {
 //						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAAGE)
 //						)))
 //				.setOrderBy(OrderBy.asc(TwitchChannelConstants.CREATEDDATE)).build();
-		
-		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
-				.setFilter(CompositeFilter.and(PropertyFilter.eq(TwitchChannelConstants.DELETED, false),
-						PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel) 
-						))
-				.build();
 
 		// Run the query and retrieve a list of matching entities
 		QueryResults<Entity> results = datastore.run(query);

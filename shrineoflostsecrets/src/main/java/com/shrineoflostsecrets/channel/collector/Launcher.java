@@ -25,7 +25,7 @@ public class Launcher {
 
     	logger.info("Shrine Startup");
 
-    	List<Entity> listChanels = TwitchChannelList.listChanels();
+    	List<Entity> listChanels = TwitchChannelList.listChannels();
     			
     	for(Entity entity: listChanels) {
     		ShrineChannel channel = new ShrineChannel();
