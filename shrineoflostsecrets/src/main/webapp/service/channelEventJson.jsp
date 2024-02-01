@@ -1,14 +1,5 @@
 <%@ page language="java" contentType="application/json; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.util.*"%>
-<%@ page import="org.json.JSONArray"%>
-<%@ page import="org.json.JSONObject"%>
-<%@ page import="com.google.cloud.datastore.*"%>
-<%@ page import="com.shrineoflostsecrets.channel.database.datastore.*"%>
-<%@ page import="com.shrineoflostsecrets.channel.constants.*"%>
-<%@ page import="com.shrineoflostsecrets.channel.database.entity.*"%>
-
-<%
+    pageEncoding="UTF-8"%><%@ page import="java.util.*"%><%@ page import="org.json.JSONArray"%><%@ page import="org.json.JSONObject"%><%@ page import="com.google.cloud.datastore.*"%><%@ page import="com.shrineoflostsecrets.channel.database.datastore.*"%><%@ page import="com.shrineoflostsecrets.channel.constants.*"%><%@ page import="com.shrineoflostsecrets.channel.database.entity.*"%><%
 response.setHeader("Content-Type", "application/json");
 
 boolean ban = Boolean.valueOf(request.getParameter("ban"));

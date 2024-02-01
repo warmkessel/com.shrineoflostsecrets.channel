@@ -5,8 +5,16 @@
 <%@ page import="com.shrineoflostsecrets.channel.database.datastore.*"%>
 <%@ page import="com.shrineoflostsecrets.channel.constants.*"%>
 <%@ page import="com.shrineoflostsecrets.channel.database.entity.*"%>
-
 <html>
+<!-- Google tag (gtag.js) -->
+<script async="true"
+	src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+  gtag('config', 'G-N2VTBWYNCJ');
+</script>
 <body>
 	<table>
 		<%
