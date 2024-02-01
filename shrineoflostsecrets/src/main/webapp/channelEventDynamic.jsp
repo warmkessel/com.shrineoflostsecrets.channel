@@ -1,4 +1,12 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page import="com.shrineoflostsecrets.channel.constants.*"%>
+<%
+		boolean ban = Boolean.valueOf(request.getParameter("ban"));
+		String id = request.getParameter("id");
+		String requestChannel = request.getParameter("channel");
+		String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
+		%>
+		<%=channel%>		
 <html>
 <head>
 <script async="true" src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
@@ -16,7 +24,7 @@
                 console.info('Fetching events');
 
                 // Fetch events from the server
-                const response = await fetch('/service/channelEventJson.jsp?channel=show_jax');
+                const response = await fetch('/service/channelEventJson.jsp?channel=<%=requestChannel%>&ban=<%=ban%>');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -38,7 +46,31 @@
                 data.events.forEach(event => {
                     //console.log(event.message); // Log each event's message to the console
                     const eventElement = document.createElement('div');
-                    eventElement.textContent = 'Event: ' + event.createdDate + ' ' + event.twitchUser + ': ' + event.message;
+                    var eventType = event.eventType; // Assuming eventType holds the type of event
+
+                    switch (eventType) {
+                        case "<%=TwitchChannelConstants.ONCHANNELMESSAGE%>":
+                            eventType = "Message ";
+                            break;
+                        case "<%=TwitchChannelConstants.ONDELETEMESSAAGE%>":
+                            eventType = "Delete ";
+                            break;
+                        case "<%=TwitchChannelConstants.ONUSERBAN%>":
+                            eventType = "Ban ";
+                            break;
+                        // No default case needed since eventType is initialized with the event's type
+                    }
+                    
+                    eventElement.textContent = eventType + ' Event: ' + event.createdDate + ' ' + event.twitchUser + ': ' + event.message;
+                    if(event.eventType === "<%=TwitchChannelConstants.ONUSERBAN%>" || event.eventType === "<%=TwitchChannelConstants.ONDELETEMESSAAGE%>") {
+                        eventElement.style.color = "red";
+                        console.log("!!!!!! red"); // Log each event's message to the consol
+                        //.style.color
+                    }
+                    else{
+                        console.log("!!!!!! not" + event.eventType); // Log each event's message to the consol
+
+                    }
                     eventsContainer.appendChild(eventElement);
                 });
             } catch (error) {
