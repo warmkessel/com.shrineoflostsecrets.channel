@@ -17,7 +17,10 @@
 		<maven.compiler.source>11</maven.compiler.source>
 		<maven.compiler.target>11</maven.compiler.target>
 		<maven.compiler.showDeprecation>true</maven.compiler.showDeprecation>
-		<archiveClasses>true</archiveClasses>
+		<archiveClasses>true</archiveClasses>    <!-- Define properties for
+		environment variables -->
+		<client.id>${env.CLIENT_ID}</client.id>
+		<client.secret>${env.CLIENT_SECRET}</client.secret>
 	</properties>
 	<prerequisites>
 		<maven>3.5</maven>
@@ -107,6 +110,11 @@
 			<groupId>com.github.twitch4j</groupId>
 			<artifactId>twitch4j</artifactId>
 			<version>1.19.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20210307</version>
 		</dependency>
 	</dependencies>
 

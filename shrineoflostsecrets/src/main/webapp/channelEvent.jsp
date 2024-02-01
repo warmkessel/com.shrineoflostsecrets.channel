@@ -30,6 +30,7 @@
 				channelEvent.loadFromEntity(entity);
 		%>
 		<tr>
+			<td><%=channelEvent.getCreatedDate().toString()%><td>
 			<td><a href="/* URL here! */"><%=channelEvent.getTwitchUser()%></a>
 			</td>
 			<td>
@@ -42,7 +43,7 @@
 				<b><%=channelEvent.getMessage()%></b> <%
 				} else if (TwitchChannelConstants.ONCHANNELMESSAGEELEVATED.equals(channelEvent.getEventType())) {
 				%>
-				<i><%=channelEvent.getMessage()%></i> <%
+				Elevated Sub<i><%=channelEvent.getMessage()%></i> <%
 			 	} else {
  				%> <%=channelEvent.getMessage()%>
 				<%
