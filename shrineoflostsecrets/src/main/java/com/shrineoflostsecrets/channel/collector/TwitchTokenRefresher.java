@@ -1,15 +1,25 @@
 package com.shrineoflostsecrets.channel.collector;
 
-import com.google.cloud.datastore.*;
-import com.shrineoflostsecrets.channel.collector.Bot;
-
-import java.io.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+
 import org.json.JSONObject;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.DatastoreOptions;
+import com.google.cloud.datastore.Entity;
+import com.google.cloud.datastore.Key;
+import com.google.cloud.datastore.KeyFactory;
+import com.google.cloud.datastore.Query;
+import com.google.cloud.datastore.QueryResults;
+import com.shrineoflostsecrets.channel.collector.Bot;
 
 public class TwitchTokenRefresher {
 	private static final Logger logger = LoggerFactory.getLogger(Bot.class);

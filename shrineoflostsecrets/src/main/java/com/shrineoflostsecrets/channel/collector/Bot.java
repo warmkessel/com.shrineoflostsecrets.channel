@@ -1,7 +1,5 @@
 package com.shrineoflostsecrets.channel.collector;
 
-import java.net.URL;
-
 import javax.security.auth.login.LoginException;
 
 import org.slf4j.Logger;
