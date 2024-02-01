@@ -21,6 +21,7 @@
 		environment variables -->
 		<client.id>${env.CLIENT_ID}</client.id>
 		<client.secret>${env.CLIENT_SECRET}</client.secret>
+		<debug>${env.CLIENT_SECRET}</debug>
 	</properties>
 	<prerequisites>
 		<maven>3.5</maven>
@@ -114,7 +115,7 @@
 		<dependency>
 			<groupId>org.json</groupId>
 			<artifactId>json</artifactId>
-			<version>20210307</version>
+			<version>20231013</version>
 		</dependency>
 	</dependencies>
 

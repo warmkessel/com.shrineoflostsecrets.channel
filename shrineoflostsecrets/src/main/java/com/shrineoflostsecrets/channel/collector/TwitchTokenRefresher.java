@@ -19,54 +19,43 @@ import com.google.cloud.datastore.Key;
 import com.google.cloud.datastore.KeyFactory;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
-import com.shrineoflostsecrets.channel.collector.Bot;
 
 public class TwitchTokenRefresher {
-	private static final Logger logger = LoggerFactory.getLogger(Bot.class);
+    private static final Logger logger = LoggerFactory.getLogger(TwitchTokenRefresher.class);
 
-    // Environment Variables for Client ID and Secret
     private static final String CLIENT_ID = System.getenv("CLIENT_ID");
     private static final String CLIENT_SECRET = System.getenv("CLIENT_SECRET");
 
     public static void main(String[] args) {
         try {
-            // Initialize Google Datastore client
             Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+            Entity authEntity = getAuthEntityFromDatastore(datastore);
 
-            // Fetch the refresh token from the Datastore
-            String refreshToken = getRefreshTokenFromDatastore(datastore);
-
-            // Make POST request to Twitch API
+            String refreshToken = authEntity != null ? authEntity.getString("refresh_token") : "";
             String response = requestNewTokens(refreshToken);
             JSONObject jsonResponse = new JSONObject(response);
 
-            // Extract new tokens from response
             String newAccessToken = jsonResponse.getString("access_token");
             String newRefreshToken = jsonResponse.getString("refresh_token");
 
-            // Update tokens in Google Datastore
-            updateTokensInDatastore(datastore, newAccessToken, newRefreshToken);
+            updateTokensInDatastore(datastore, newAccessToken, newRefreshToken, authEntity);
 
             logger.info("Tokens updated successfully.");
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    private static String getRefreshTokenFromDatastore(Datastore datastore) {
+    private static Entity getAuthEntityFromDatastore(Datastore datastore) {
         Query<Entity> query = Query.newEntityQueryBuilder().setKind("auth").build();
         QueryResults<Entity> results = datastore.run(query);
-        Entity latestEntity = results.hasNext() ? results.next() : null;
-        return latestEntity != null ? latestEntity.getString("refresh_token") : "";
+        return results.hasNext() ? results.next() : null;
     }
 
     private static String requestNewTokens(String refreshToken) throws IOException {
         URL url = new URL("https://id.twitch.tv/oauth2/token");
         String params = String.format("grant_type=refresh_token&refresh_token=%s&client_id=%s&client_secret=%s", 
                                       refreshToken, CLIENT_ID, CLIENT_SECRET);
-        logger.info("params {}", params);
-
         HttpURLConnection con = (HttpURLConnection) url.openConnection();
         con.setRequestMethod("POST");
         con.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
@@ -87,13 +76,21 @@ public class TwitchTokenRefresher {
         }
     }
 
-    private static void updateTokensInDatastore(Datastore datastore, String accessToken, String refreshToken) {
+    private static void updateTokensInDatastore(Datastore datastore, String accessToken, String refreshToken, Entity existingEntity) {
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("auth");
-        Key key = datastore.allocateId(keyFactory.newKey());
-        Entity authEntity = Entity.newBuilder(key)
-            .set("access_token", accessToken)
-            .set("refresh_token", refreshToken)
-            .build();
+        Entity authEntity;
+        if (existingEntity != null) {
+            authEntity = Entity.newBuilder(existingEntity)
+                .set("access_token", accessToken)
+                .set("refresh_token", refreshToken)
+                .build();
+        } else {
+            Key key = datastore.allocateId(keyFactory.newKey());
+            authEntity = Entity.newBuilder(key)
+                .set("access_token", accessToken)
+                .set("refresh_token", refreshToken)
+                .build();
+        }
 
         datastore.put(authEntity);
     }

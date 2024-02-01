@@ -13,6 +13,7 @@ import com.github.twitch4j.chat.events.channel.UserBanEvent;
 import com.github.twitch4j.events.ChannelGoLiveEvent;
 import com.github.twitch4j.events.ChannelGoOfflineEvent;
 import com.github.twitch4j.pubsub.events.RewardRedeemedEvent;
+import com.shrineoflostsecrets.channel.collector.Launcher;
 import com.shrineoflostsecrets.channel.collector.TwitchStream;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannelEvent;
@@ -52,6 +53,7 @@ public class ShrineCapture extends ServiceAbstract {
 
 		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
 				.onEvent(RewardRedeemedEvent.class, this::onRewardRedeemedEvent);
+
 	}
 
 	/**
@@ -85,14 +87,22 @@ public class ShrineCapture extends ServiceAbstract {
 				event.getUser().getName(), event.getReason());
 	}
 
+//	public void onChannelMessage(ChannelMessageEvent event) {
+//		if (event.getElevatedChatPayment().isPresent()) {
+//			log(TwitchChannelConstants.ONCHANNELMESSAGEELEVATED, event.getEventId(), event.getChannel().getName(),
+//					event.getUser().getName(), event.getMessage(), event.getElevatedChatPayment().get().getValue().toString());
+//		} else {
+//			log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
+//					event.getUser().getName(), event.getMessage());
+//		}
+//	}
 	public void onChannelMessage(ChannelMessageEvent event) {
 		if (event.getElevatedChatPayment().isPresent()) {
-			log(TwitchChannelConstants.ONCHANNELMESSAGEELEVATED, event.getEventId(), event.getChannel().getName(),
-					event.getUser().getName(), event.getMessage(), event.getElevatedChatPayment().toString());
-		} else {
-			log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
-					event.getUser().getName(), event.getMessage());
+			logger.info("Event Log: {}", event);
 		}
+		log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
+				event.getUser().getName(), event.getMessage());
+
 	}
 
 	public void onGoOfflineEvent(ChannelGoOfflineEvent event) {
@@ -119,7 +129,8 @@ public class ShrineCapture extends ServiceAbstract {
 
 	private void log(String eventType, String eventId, String twitchChannel, String twitchUser, String message,
 			String elevatedChatPayment, String redeemTime, String rewared) {
-		logger.info("{}: {} {} {} {} {} {} {}", eventType, eventId, twitchUser, twitchChannel, message, elevatedChatPayment, rewared, redeemTime);
+		logger.info("{}: {} {} {} {} {} {} {}", eventType, eventId, twitchUser, twitchChannel, message,
+				elevatedChatPayment, rewared, redeemTime);
 		ShrineChannelEvent ts = new ShrineChannelEvent();
 		ts.setEventType(eventType);
 		ts.setEventId(eventId);
@@ -129,6 +140,8 @@ public class ShrineCapture extends ServiceAbstract {
 		ts.setRewared(rewared);
 		ts.setRedeemTime(redeemTime);
 		ts.setMessage(message);
-		ts.save();
+		if(!Launcher.DEBUG.equalsIgnoreCase("true")) {
+			ts.save();
+		}
 	}
 }

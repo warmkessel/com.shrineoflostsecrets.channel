@@ -20,6 +20,7 @@ public class Launcher {
     private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
     // Environment Variables
+    public static final String DEBUG = System.getenv("DEBUG");
     public static final String CLIENT_ID = System.getenv("CLIENT_ID");
     public static final String CLIENT_SECRET = System.getenv("CLIENT_SECRET");
 
@@ -28,6 +29,7 @@ public class Launcher {
         logger.info("Shrine Startup");
         logger.info("Client ID: {}", CLIENT_ID);
         logger.info("Client Secret: [PROTECTED]");
+        logger.info("Debug: {}", DEBUG);
 
         List<Entity> listChannels = TwitchChannelList.listChannels();
         
