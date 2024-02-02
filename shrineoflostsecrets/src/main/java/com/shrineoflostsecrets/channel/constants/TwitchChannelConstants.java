@@ -10,6 +10,8 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String TWITCHFOLLOW = "TwitchFollow";
 	public static final String TWITCHSUBSCRIBE = "TwitchSubscribe";
 	public static final String SHRINELASTLOGGED = "ShrineLastLongedIn";
+	public static final String TWITCHLASTSTART = "TwitchLastStart";
+	public static final String TWITCHLASTEND = "TwitchLastEnd";
 	
 	public static final String TWITCHCHANNEL = "TwitchChannel";
 	public static final String DISCORDCHANNEL = "DiscordChannel";

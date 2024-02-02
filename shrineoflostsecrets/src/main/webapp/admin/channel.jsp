@@ -18,6 +18,9 @@ UserService userService = UserServiceFactory.getUserService();
     String twitchUserName = request.getParameter("twitchUserName");
     String discordUserName = request.getParameter("discordUserName");
     String twitchServiceTypeStr = request.getParameter("twitchServiceType");
+    String twitchLastStartStr = request.getParameter("twitchLastStart");
+    String twitchLastEndStr = request.getParameter("twitchLastEnd");
+    
     long twitchServiceType = 0;
 
     if (twitchServiceTypeStr != null && !twitchServiceTypeStr.isEmpty()) {
@@ -39,6 +42,8 @@ UserService userService = UserServiceFactory.getUserService();
         channel.setTwitchUserName(twitchUserName);
         channel.setDiscordUserName(discordUserName);
         channel.setTwitchServiceType(twitchServiceType);
+        channel.setTwitchLastStart(twitchLastStartStr);
+        channel.setTwitchLastEnd(twitchLastEndStr);
         channel.save(); // Save the new channel
     }
     List<Entity> listChannels = TwitchChannelList.listChannels(); // Retrieve list of ShrineChannels
@@ -78,6 +83,8 @@ UserService userService = UserServiceFactory.getUserService();
         Twitch Username: <input type="text" name="twitchUserName" value=<%=channel.getTwitchUserName()%>><br>
         Discord Username: <input type="text" name="discordUserName" value=<%=channel.getDiscordUserName()%>><br>
         Twitch Service Type: <input type="text" name="twitchServiceType" value="0"><br>
+        Twitch Last Start: <input type="datetime-local" name="twitchLastStart" value="<%=channel.getTwitchLastStartString()%>"><br>
+        Twitch Last End: <input type="datetime-local" name="twitchLastEnd" value="<%=channel.getTwitchLastEndString()%>"><br>
         <input type="submit" value="Add Channel">
     </form>
 </body>

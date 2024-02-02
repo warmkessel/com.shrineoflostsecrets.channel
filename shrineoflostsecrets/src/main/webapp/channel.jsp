@@ -26,8 +26,10 @@ List<Entity> listChanels = TwitchChannelList.listChannels();
     		channel.loadFromEntity(entity);
 %>
 <tr>
+<td><a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>">Twitch <% if(channel.getTwitchLastEnd().getSeconds() - channel.getTwitchLastStart().getSeconds() < 0){%>LIVE!<%}%></a></td>
 <td><a href="channelEvent.jsp?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
-<td><a href="channelEventDynamic.jsp?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
+<td><a href="channelEventDynamic.jsp?channel=<%=channel.getTwitchChannel() %>">Ajax</a></td>
+<td><a href="channelEventDynamic.jsp?channel=<%=channel.getTwitchChannel() %>&ban=true">Deleted</a></td>
 </tr>
 <%}%>
 </table>

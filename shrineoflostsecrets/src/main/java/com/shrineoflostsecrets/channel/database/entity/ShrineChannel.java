@@ -1,13 +1,17 @@
 package com.shrineoflostsecrets.channel.database.entity;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.shrineoflostsecrets.channel.constants.Constants;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
-
 
 public class ShrineChannel extends BaseEntity implements Comparable<ShrineChannel> {
 
@@ -17,13 +21,13 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 	private static final long serialVersionUID = -361472214131790072L;
 	private static final Logger logger = LoggerFactory.getLogger(ShrineChannel.class);
 
-
 	private String twitchChannel = "";
 	private String discordChannel = "";
 	private String discordUserName = "";
 	private String twitchUserName = "";
 	private long twitchServiceType = 0;
-
+	private Timestamp twitchLastStart = Timestamp.now();
+	private Timestamp twitchLastEnd = Timestamp.now();
 
 	public ShrineChannel() {
 	}
@@ -43,7 +47,7 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 	public void setDiscordUserName(String discordUserName) {
 		this.discordUserName = discordUserName;
 	}
-	
+
 	public String getTwitchChannel() {
 		return twitchChannel;
 	}
@@ -68,7 +72,62 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 		this.twitchServiceType = twitchServiceType;
 	}
 
-	
+	public Timestamp getTwitchLastStart() {
+		return twitchLastStart;
+	}
+
+	public String getTwitchLastStartString() {
+		Date date = getTwitchLastStart().toDate();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		return dateFormat.format(date);
+	}
+
+	public void setTwitchLastStart(Timestamp lastStart) {
+		this.twitchLastStart = lastStart;
+	}
+
+	public void setTwitchLastStart(Date lastStart) {
+		setTwitchLastStart(Timestamp.of(lastStart));
+	}
+
+	public void setTwitchLastStart(String lastStart) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		try {
+			setTwitchLastStart(dateFormat.parse(lastStart));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public Timestamp getTwitchLastEnd() {
+		return twitchLastEnd;
+	}
+	public String getTwitchLastEndString() {
+		Date date = getTwitchLastStart().toDate();
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		return dateFormat.format(date);
+	}
+
+	public void setTwitchLastEnd(Timestamp lastLastEnd) {
+		this.twitchLastEnd = lastLastEnd;
+	}
+
+	public void setTwitchLastEnd(String lastLastEnd) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
+		try {
+			setTwitchLastEnd(dateFormat.parse(lastLastEnd));
+		} catch (ParseException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+	}
+
+	public void setTwitchLastEnd(Date lastLastEnd) {
+		setTwitchLastEnd(Timestamp.of(lastLastEnd));
+	}
 
 	@Override
 	public boolean equals(Object obj) {
@@ -89,28 +148,34 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 		result = 31 * result + discordChannel.hashCode();
 		result = 31 * result + discordUserName.hashCode();
 		result = 31 * result + twitchChannel.hashCode();
+		result = 31 * result + twitchLastStart.hashCode();
+		result = 31 * result + twitchLastEnd.hashCode();
+
 		return result;
 	}
 
 	public void save() {
 		Entity.Builder entity = Entity.newBuilder(getKey());
 		entity.set(TwitchChannelConstants.DELETED, getDeleted())
-				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate()).set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
+				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate())
+				.set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
 				.set(TwitchChannelConstants.TWITCHCHANNEL, getTwitchChannel())
 				.set(TwitchChannelConstants.DISCORDCHANNEL, getDiscordChannel())
 				.set(TwitchChannelConstants.TWITCHUSERNAME, getTwitchUserName())
 				.set(TwitchChannelConstants.DISCORDUSERNAME, getDiscordUserName())
 				.set(TwitchChannelConstants.TWITCHSERVICETYPE, getTwitchServiceType())
-				.build();
+				.set(TwitchChannelConstants.TWITCHLASTSTART, getTwitchLastStart())
+				.set(TwitchChannelConstants.TWITCHLASTEND, getTwitchLastEnd()).build();
 		getDatastore().put(entity.build());
 	}
 
 	public void loadShrineChannel(String key) {
-		 loadShrineChannel(Long.parseLong(key));
+		loadShrineChannel(Long.parseLong(key));
 	}
 
 	public void loadShrineChannel(long key) {
-		 loadShrineChannel(Key.newBuilder(Constants.SHRINEOFLOSTSECRETS, TwitchChannelConstants.SHRINECHANNEL, key).build());
+		loadShrineChannel(
+				Key.newBuilder(Constants.SHRINEOFLOSTSECRETS, TwitchChannelConstants.SHRINECHANNEL, key).build());
 	}
 
 	public void loadShrineChannel(Key key) {
@@ -127,17 +192,25 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 			setTwitchUserName(entity.getString(TwitchChannelConstants.TWITCHUSERNAME));
 			setDiscordUserName(entity.getString(TwitchChannelConstants.DISCORDUSERNAME));
 			setTwitchServiceType(entity.getLong(TwitchChannelConstants.TWITCHSERVICETYPE));
+
+			if (entity.contains(TwitchChannelConstants.TWITCHLASTSTART)) {
+				setTwitchLastStart(entity.getTimestamp(TwitchChannelConstants.TWITCHLASTSTART));
+			}
+			if (entity.contains(TwitchChannelConstants.TWITCHLASTEND)) {
+				setTwitchLastEnd(entity.getTimestamp(TwitchChannelConstants.TWITCHLASTEND));
+			}
 		}
 	}
 
 	public String toString() {
-		return "TwitchStream{" + "" + Constants.KEY + "='" + getKeyString() + '\'' 
-				+ ", " + TwitchChannelConstants.TWITCHCHANNEL + "\"='" + twitchChannel + '\''
-				+ ", " + TwitchChannelConstants.DISCORDCHANNEL + "\"='" + discordChannel + '\''
-				+ ", " + TwitchChannelConstants.TWITCHUSERNAME + "\"='" + twitchUserName + '\''
-				+ ", " + TwitchChannelConstants.DISCORDUSERNAME + "\"='" +  discordUserName + '\''
-				+ ", " + TwitchChannelConstants.TWITCHSERVICETYPE + "\"='" + twitchServiceType + '\''
-				+ '}';
+		return "TwitchStream{" + "" + Constants.KEY + "='" + getKeyString() + '\'' + ", "
+				+ TwitchChannelConstants.TWITCHCHANNEL + "\"='" + twitchChannel + '\'' + ", "
+				+ TwitchChannelConstants.DISCORDCHANNEL + "\"='" + discordChannel + '\'' + ", "
+				+ TwitchChannelConstants.TWITCHUSERNAME + "\"='" + twitchUserName + '\'' + ", "
+				+ TwitchChannelConstants.DISCORDUSERNAME + "\"='" + discordUserName + '\'' + ", "
+				+ TwitchChannelConstants.TWITCHSERVICETYPE + "\"='" + twitchServiceType + '\'' + ", "
+				+ TwitchChannelConstants.TWITCHLASTSTART + "\"='" + twitchLastStart + '\'' + ", "
+				+ TwitchChannelConstants.TWITCHLASTEND + "\"='" + twitchLastEnd + '\'' + '}';
 	}
 
 	public int compareTo(ShrineChannel other) {
@@ -155,4 +228,5 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 	public String getEventKind() {
 		return TwitchChannelConstants.SHRINECHANNEL;
 	}
+
 }

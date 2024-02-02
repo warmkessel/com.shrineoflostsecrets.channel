@@ -31,7 +31,7 @@ public class TwitchChannelEventList {
 						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAAGE)
 						)))
 				.setOrderBy(OrderBy.desc(TwitchChannelConstants.CREATEDDATE))
-				.setLimit(500).build();
+				.setLimit(1500).build();
 		
 //		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
 //				.setFilter(CompositeFilter.and(PropertyFilter.eq(TwitchChannelConstants.DELETED, false),

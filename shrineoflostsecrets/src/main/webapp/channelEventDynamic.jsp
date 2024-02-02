@@ -61,15 +61,9 @@
                         // No default case needed since eventType is initialized with the event's type
                     }
                     
-                    eventElement.textContent = eventType + ' Event: ' + event.createdDate + ' ' + event.twitchUser + ': ' + event.message;
+                    eventElement.innerHTML = eventType + ' Event: ' + event.createdDate + ' <a href="https://www.twitch.tv/' + event.twitchUser +'">' + event.twitchUser + '</a>: ' + event.message;
                     if(event.eventType === "<%=TwitchChannelConstants.ONUSERBAN%>" || event.eventType === "<%=TwitchChannelConstants.ONDELETEMESSAAGE%>") {
                         eventElement.style.color = "red";
-                        console.log("!!!!!! red"); // Log each event's message to the consol
-                        //.style.color
-                    }
-                    else{
-                        console.log("!!!!!! not" + event.eventType); // Log each event's message to the consol
-
                     }
                     eventsContainer.appendChild(eventElement);
                 });
@@ -88,6 +82,7 @@
 <body onload="startEventUpdates()">
     <div id="status">Waiting for events...</div> <!-- Status div to be updated on new events -->
 
+<%if(ban){ %>Deleted Messages<%} else{ %>All Messages<%} %>
     <h1>Channel Events</h1>
     <div id="events"></div> <!-- Container for events -->
 </body>

@@ -5,6 +5,7 @@
 <%@ page import="com.shrineoflostsecrets.channel.database.datastore.*"%>
 <%@ page import="com.shrineoflostsecrets.channel.constants.*"%>
 <%@ page import="com.shrineoflostsecrets.channel.database.entity.*"%>
+<%@ page import="com.shrineoflostsecrets.channel.util.*"%>
 <html>
 <!-- Google tag (gtag.js) -->
 <script async="true"
@@ -38,7 +39,7 @@
 				channelEvent.loadFromEntity(entity);
 		%>
 		<tr>
-			<td><%=channelEvent.getCreatedDate().toString()%><td>
+			<td><%=DateFormatter.convertToHourAndMin(channelEvent.getCreatedDate())%><td>
 			<td><a href="/* URL here! */"><%=channelEvent.getTwitchUser()%></a>
 			</td>
 			<td>
