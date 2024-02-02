@@ -33,13 +33,21 @@ public class TwitchTokenRefresher {
 
             String refreshToken = authEntity != null ? authEntity.getString("refresh_token") : "";
             String response = requestNewTokens(refreshToken);
+//            logger.info("response" = response);
             JSONObject jsonResponse = new JSONObject(response);
 
             String newAccessToken = jsonResponse.getString("access_token");
             String newRefreshToken = jsonResponse.getString("refresh_token");
+            long expiresIn = jsonResponse.getLong("expires_in");
 
-            updateTokensInDatastore(datastore, newAccessToken, newRefreshToken, authEntity);
+            String scope = ""; // Extract scope
 
+            //            String scope = jsonResponse.getString("scope"); // Extract scope
+            String tokenType = jsonResponse.getString("token_type"); // Extract token_type
+
+            updateTokensInDatastore(datastore, newAccessToken, newRefreshToken, expiresIn, scope, tokenType, authEntity);
+
+            
             logger.info("Tokens updated successfully.");
         } catch (Exception e) {
             e.printStackTrace();
@@ -76,19 +84,25 @@ public class TwitchTokenRefresher {
         }
     }
 
-    private static void updateTokensInDatastore(Datastore datastore, String accessToken, String refreshToken, Entity existingEntity) {
+    private static void updateTokensInDatastore(Datastore datastore, String accessToken, String refreshToken, long expiresIn, String scope, String tokenType, Entity existingEntity) {
         KeyFactory keyFactory = datastore.newKeyFactory().setKind("auth");
         Entity authEntity;
         if (existingEntity != null) {
             authEntity = Entity.newBuilder(existingEntity)
                 .set("access_token", accessToken)
                 .set("refresh_token", refreshToken)
-                .build();
+                .set("expires_in", expiresIn)
+                .set("scope", scope) // Include scope in the datastore entity
+                .set("token_type", tokenType)
+            .build();
         } else {
             Key key = datastore.allocateId(keyFactory.newKey());
             authEntity = Entity.newBuilder(key)
                 .set("access_token", accessToken)
                 .set("refresh_token", refreshToken)
+                .set("expires_in", expiresIn)
+                .set("scope", scope) // Include scope in the datastore entity
+                .set("token_type", tokenType)
                 .build();
         }
 

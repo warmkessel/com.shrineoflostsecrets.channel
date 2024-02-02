@@ -87,10 +87,23 @@ public class Bot {
 
 		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
 
-		// region TwitchClient
-		TwitchClient twitchClient = clientBuilder
-				.withEnableHelix(true).withChatAccount(credential).withEnableChat(true).withEnablePubSub(true)
-				.withEnableTMI(true).withEnableKraken(true).withDefaultAuthToken(credential).build();
+		 
+		    
+			TwitchClient twitchClient = clientBuilder
+			.withEnableHelix(true)
+			.withClientId(Launcher.CLIENT_ID)
+		    .withClientSecret(Launcher.CLIENT_SECRET)
+		    .withEnableChat(true)
+		    .withEnablePubSub(true)
+			//.withEnableTMI(true)
+			//.withEnableKraken(true)
+		    //.withDefaultAuthToken(credential)
+		    .build();
+	    
+		    // region TwitchClient
+//		TwitchClient twitchClient = clientBuilder
+//				.withEnableHelix(true).withChatAccount(credential).withEnableChat(true).withEnablePubSub(true)
+//				.withEnableTMI(true).withEnableKraken(true).withDefaultAuthToken(credential).build();
 		// endregion
  		twitchClient.getClientHelper().enableStreamEventListener(name);
 		twitchClient.getClientHelper().enableFollowEventListener(name);

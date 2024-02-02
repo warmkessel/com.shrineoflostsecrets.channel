@@ -23,21 +23,8 @@ try {
         JSONObject jsonEvent = new JSONObject();
         jsonEvent.put("createdDate", channelEvent.getCreatedDate().toString());
         jsonEvent.put("twitchUser", channelEvent.getTwitchUser());
-        String eventType = channelEvent.getEventType();
-        String message = channelEvent.getMessage();
-
-        if (TwitchChannelConstants.ONUSERBAN.equals(eventType)) {
-            jsonEvent.put("eventType", "User Banned");
-        } else if (TwitchChannelConstants.ONDELETEMESSAAGE.equals(eventType)) {
-            jsonEvent.put("eventType", "Deleted Message");
-            jsonEvent.put("message", message);
-        } else if (TwitchChannelConstants.ONCHANNELMESSAGEELEVATED.equals(eventType)) {
-            jsonEvent.put("eventType", "Elevated Sub");
-            jsonEvent.put("message", message);
-        } else {
-            jsonEvent.put("message", message);
-        }
-
+        jsonEvent.put("eventType", channelEvent.getEventType());
+        jsonEvent.put("message", channelEvent.getMessage());
         jsonEvents.put(jsonEvent);
     }
 } catch (Exception e) {
