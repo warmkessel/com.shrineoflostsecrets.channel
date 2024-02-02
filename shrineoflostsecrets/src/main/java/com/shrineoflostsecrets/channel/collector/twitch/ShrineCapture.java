@@ -87,30 +87,34 @@ public class ShrineCapture extends ServiceAbstract {
 				event.getUser().getName(), event.getReason());
 	}
 
-//	public void onChannelMessage(ChannelMessageEvent event) {
-//		if (event.getElevatedChatPayment().isPresent()) {
-//			log(TwitchChannelConstants.ONCHANNELMESSAGEELEVATED, event.getEventId(), event.getChannel().getName(),
-//					event.getUser().getName(), event.getMessage(), event.getElevatedChatPayment().get().getValue().toString());
-//		} else {
-//			log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
-//					event.getUser().getName(), event.getMessage());
-//		}
-//	}
 	public void onChannelMessage(ChannelMessageEvent event) {
 		if (event.getElevatedChatPayment().isPresent()) {
-			logger.info("Event Log: {}", event);
+			log(TwitchChannelConstants.ONCHANNELMESSAGEELEVATED, event.getEventId(), event.getChannel().getName(),
+					event.getUser().getName(), event.getMessage(), event.getElevatedChatPayment().get().getValue().toString());
+		} else {
+			log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
+					event.getUser().getName(), event.getMessage());
 		}
-		log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
-				event.getUser().getName(), event.getMessage());
-
 	}
+//	public void onChannelMessage(ChannelMessageEvent event) {
+//		if (event.getElevatedChatPayment().isPresent()) {
+//			logger.info("Event Log: {}", event);
+//		}
+//		log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
+//				event.getUser().getName(), event.getMessage());
+//	}
 
 	public void onGoOfflineEvent(ChannelGoOfflineEvent event) {
 		log(TwitchChannelConstants.ONGOOFFLINEEVENT, event.getEventId(), event.getChannel().getName());
+		getTwitchStream().getShrineChannel().setTwitchLastEnd();
+		getTwitchStream().getShrineChannel().save();
 	}
 
 	public void onGoLiveEvent(ChannelGoLiveEvent event) {
 		log(TwitchChannelConstants.ONGOLIVEEVENT, event.getEventId(), event.getChannel().getName());
+		getTwitchStream().getShrineChannel().setTwitchLastStart();
+		getTwitchStream().getShrineChannel().save();
+
 	}
 
 	private void log(String eventType, String eventId, String twitchChannel) {

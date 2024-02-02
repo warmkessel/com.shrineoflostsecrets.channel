@@ -5,9 +5,6 @@ import javax.security.auth.login.LoginException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-//import com.fasterxml.jackson.databind.ObjectMapper;
-//import com.fasterxml.jackson.dataformat.yaml.YAMLFactory;
-import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.google.cloud.datastore.Datastore;
@@ -16,6 +13,7 @@ import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Query;
 import com.google.cloud.datastore.QueryResults;
 import com.shrineoflostsecrets.channel.collector.twitch.ShrineCapture;
+import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 
 
 public class Bot {
@@ -78,17 +76,12 @@ public class Bot {
 	public void start() {
 		new ShrineCapture(getTwitchStream());
 //		new LogService(getTwitchStream());
-		getTwitchStream().getTwitchClient().getChat().joinChannel(getTwitchStream().getChannel());
+		getTwitchStream().getTwitchClient().getChat().joinChannel(getTwitchStream().getChannel().getTwitchChannel());
 	    
 	}
 
 	public TwitchStream newTwitchClient(String name, long twitchserviceType) {
-		OAuth2Credential credential = new OAuth2Credential("twitch", OAUTH);
-
 		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
-
-		 
-		    
 			TwitchClient twitchClient = clientBuilder
 			.withEnableHelix(true)
 			.withClientId(Launcher.CLIENT_ID)
@@ -100,17 +93,12 @@ public class Bot {
 		    //.withDefaultAuthToken(credential)
 		    .build();
 	    
-		    // region TwitchClient
-//		TwitchClient twitchClient = clientBuilder
-//				.withEnableHelix(true).withChatAccount(credential).withEnableChat(true).withEnablePubSub(true)
-//				.withEnableTMI(true).withEnableKraken(true).withDefaultAuthToken(credential).build();
-		// endregion
  		twitchClient.getClientHelper().enableStreamEventListener(name);
 		twitchClient.getClientHelper().enableFollowEventListener(name);
 //		twitchClient.getPubSub().listenForChannelPointsRedemptionEvents(credential, "149223493");
 
 
-		return new TwitchStream(name, twitchClient, twitchserviceType);
+		return new TwitchStream(ShrineChannel.getShrineChannelName(name), twitchClient, twitchserviceType);
 	}
 	public TwitchStream getTwitchStream() {
 		return twitchStream;

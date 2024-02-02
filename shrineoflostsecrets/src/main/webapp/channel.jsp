@@ -20,15 +20,15 @@
 <table>
 
 <%
-List<Entity> listChanels = TwitchChannelList.listChannels();
+List<Entity> listChanels = ShrinehannelService.listChannels();
     	for(Entity entity: listChanels) {
     		ShrineChannel channel = new ShrineChannel();
     		channel.loadFromEntity(entity);
+    		boolean live = (channel.getTwitchLastStart().getSeconds() - channel.getTwitchLastEnd().getSeconds() > 0);
 %>
 <tr>
-<td><a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>">Twitch <% if(channel.getTwitchLastEnd().getSeconds() - channel.getTwitchLastStart().getSeconds() < 0){%>LIVE!<%}%></a></td>
-<td><a href="channelEvent.jsp?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
-<td><a href="channelEventDynamic.jsp?channel=<%=channel.getTwitchChannel() %>">Ajax</a></td>
+<td><a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>">Twitch <%if(live){%>LIVE!<%}%></a></td>
+<td><a href="<%if(live){%>channelEventDynamic.jsp<%}else{ %>channelEvent.jsp<%}%>?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
 <td><a href="channelEventDynamic.jsp?channel=<%=channel.getTwitchChannel() %>&ban=true">Deleted</a></td>
 </tr>
 <%}%>

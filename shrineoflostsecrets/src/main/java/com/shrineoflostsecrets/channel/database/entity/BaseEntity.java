@@ -3,9 +3,6 @@ package com.shrineoflostsecrets.channel.database.entity;
 import java.io.Serializable;
 import java.util.Objects;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.cloud.Timestamp;
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
@@ -19,7 +16,7 @@ public  abstract class BaseEntity implements  Serializable {
 	 * 
 	 */
 	private static final long serialVersionUID = 7160882192926634429L;
-	private static final Logger logger = LoggerFactory.getLogger(BaseEntity.class);
+//	private static final Logger logger = LoggerFactory.getLogger(BaseEntity.class);
 
 
 	private Key key = null;
@@ -63,6 +60,9 @@ public  abstract class BaseEntity implements  Serializable {
 			 key = getDatastore().allocateId(keyFactory.newKey());
 		 }
 		return key;
+	}
+	public Long getId() {
+		return getKeyLong();
 	}
 	public Long getKeyLong() {
 		//log.info("getKey " + ((getKey() == null) ? "null" : "not Null"));

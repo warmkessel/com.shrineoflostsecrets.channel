@@ -1,14 +1,15 @@
 package com.shrineoflostsecrets.channel.collector;
 
 import com.github.twitch4j.TwitchClient;
-
+import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 
 public class TwitchStream {
 	private TwitchClient twitchClient = null;
-	private String channel = "";
+	private ShrineChannel channel = null;
 	private long subscriptionEvents = 0;
+	private ShrineChannel shrineChannel = null;
 
-	public TwitchStream(String channel, TwitchClient twitchClient, long twitchserviceType) {
+	public TwitchStream(ShrineChannel channel, TwitchClient twitchClient, long twitchserviceType) {
 		this.channel = channel;
 		this.twitchClient = twitchClient;
 		this.subscriptionEvents = twitchserviceType;
@@ -19,7 +20,16 @@ public class TwitchStream {
 	public long getTwitchserviceType() {
 		return subscriptionEvents;
 	}
-	public String getChannel() {
+	public ShrineChannel getChannel() {
 		return channel;
+	}
+	public ShrineChannel getShrineChannel() {
+		if(shrineChannel == null) {
+			shrineChannel = new ShrineChannel();
+			if(getChannel().getId() != 0) {
+				shrineChannel.loadShrineChannel(getChannel().getId());
+			}
+		}
+		return shrineChannel;
 	}
 }

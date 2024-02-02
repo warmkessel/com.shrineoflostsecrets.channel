@@ -26,12 +26,12 @@ public class TwitchChannelEventList {
 						PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel), 
 						CompositeFilter.or(
 						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGE),
-						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGEELEVATED),
+						//PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGEELEVATED),
 						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONUSERBAN),
 						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAAGE)
 						)))
 				.setOrderBy(OrderBy.desc(TwitchChannelConstants.CREATEDDATE))
-				.setLimit(1500).build();
+				.setLimit(500).build();
 		
 //		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
 //				.setFilter(CompositeFilter.and(PropertyFilter.eq(TwitchChannelConstants.DELETED, false),

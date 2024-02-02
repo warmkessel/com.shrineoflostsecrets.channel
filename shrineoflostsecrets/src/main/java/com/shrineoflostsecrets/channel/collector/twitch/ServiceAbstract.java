@@ -11,4 +11,7 @@ public abstract class ServiceAbstract{
     	this.twitchStream = twitchStream;
 
 	}
+	public TwitchStream getTwitchStream() {
+		return twitchStream;
+	}
 }
