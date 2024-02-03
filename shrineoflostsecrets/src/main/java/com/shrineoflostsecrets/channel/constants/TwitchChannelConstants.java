@@ -30,7 +30,7 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String ONCHANNELLEAVEEVENT = "onChannelLeaveEvent";
 	public static final String ONCHANNELJOINEVENT = "onChannelJoinEvent";
 	public static final String ONREWARDREDEEMEVENT = "onRewardRedeemedEvent";
-	public static final String ONDELETEMESSAAGE = "onDeleteMessageEvent";
+	public static final String ONDELETEMESSAGE = "onDeleteMessageEvent";
 	public static final String ONCHANNELMESSAGE = "onChannelMessage";
 	public static final String ONCHANNELMESSAGEELEVATED = "onChannelMessageElevated";
 	public static final String ONGOOFFLINEEVENT = "onGoOfflineEvent";

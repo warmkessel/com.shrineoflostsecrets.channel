@@ -2,20 +2,18 @@
     pageEncoding="UTF-8"%><%@ page import="java.util.*"%><%@ page import="com.shrineoflostsecrets.channel.util.*"%><%@ page import="org.json.JSONArray"%><%@ page import="org.json.JSONObject"%><%@ page import="com.google.cloud.datastore.*"%><%@ page import="com.shrineoflostsecrets.channel.database.datastore.*"%><%@ page import="com.shrineoflostsecrets.channel.constants.*"%><%@ page import="com.shrineoflostsecrets.channel.database.entity.*"%><%
 response.setHeader("Content-Type", "application/json");
 
-boolean ban = Boolean.valueOf(request.getParameter("ban"));
-String id = request.getParameter("id");
-String requestChannel = request.getParameter("channel");
-String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
+    boolean unlimited = Boolean.valueOf(request.getParameter("unlimited"));
+    boolean ban = Boolean.valueOf(request.getParameter("ban"));
+    String id = request.getParameter("id");
+    String requestChannel = request.getParameter("channel");
+    String userName = request.getParameter("userName");
+	String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
 
 JSONArray jsonEvents = new JSONArray();
 
 try {
     List<Entity> listChannels = null;
-    if (ban) {
-        listChannels = TwitchChannelEventList.listChanelEventsDeleted(channel);
-    } else {
-        listChannels = TwitchChannelEventList.listChanelEvents(channel);
-    }
+    listChannels = ShrineChannelEventList.listChanelEvents(requestChannel, "", false, false);
     for (Entity entity : listChannels) {
         ShrineChannelEvent channelEvent = new ShrineChannelEvent();
         channelEvent.loadFromEntity(entity);

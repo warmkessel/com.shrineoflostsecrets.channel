@@ -48,12 +48,12 @@ public class ShrineCapture extends ServiceAbstract {
 //		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
 //				.onEvent(ChannelJoinEvent.class, this::onChannelJoinEvent);
 
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(ChannelLeaveEvent.class, this::onChannelLeaveEvent);
-
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(RewardRedeemedEvent.class, this::onRewardRedeemedEvent);
-
+//		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
+//				.onEvent(ChannelLeaveEvent.class, this::onChannelLeaveEvent);
+//
+//		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
+//				.onEvent(RewardRedeemedEvent.class, this::onRewardRedeemedEvent);
+//
 	}
 
 	/**
@@ -78,7 +78,7 @@ public class ShrineCapture extends ServiceAbstract {
 	}
 
 	public void onDeleteMessageEvent(DeleteMessageEvent event) {
-		log(TwitchChannelConstants.ONDELETEMESSAAGE, event.getEventId(), event.getChannel().getName(),
+		log(TwitchChannelConstants.ONDELETEMESSAGE, event.getEventId(), event.getChannel().getName(),
 				event.getUserName(), event.getMessage());
 	}
 

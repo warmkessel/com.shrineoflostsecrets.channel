@@ -1,30 +1,33 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page import="com.shrineoflostsecrets.channel.constants.*"%>
 <%
-		boolean ban = Boolean.valueOf(request.getParameter("ban"));
-		String id = request.getParameter("id");
-		String requestChannel = request.getParameter("channel");
-		String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
-		%>
-		<%=channel%>		
+boolean unlimited = Boolean.valueOf(request.getParameter("unlimited"));
+boolean ban = Boolean.valueOf(request.getParameter("ban"));
+String id = request.getParameter("id");
+String requestChannel = request.getParameter("channel");
+String userName = request.getParameter("userName");
+String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
+%>
+<%=channel%>
 <html>
 <head>
-<script async="true" src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
+<script async="true"
+	src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-N2VTBWYNCJ');
 </script>
-    <title>Channel Events Dynamic Display</title>
-    <script>
+<title>Channel Events Dynamic Display</title>
+<script>
         // Function to fetch and display events
         async function fetchAndDisplayEvents() {
             try {
                 console.info('Fetching events');
 
                 // Fetch events from the server
-                const response = await fetch('/service/channelEventJson.jsp?channel=<%=requestChannel%>&ban=<%=ban%>');
+                const response = await fetch('/service/channelEventJson.jsp?channel=<%=requestChannel%>&ban=<%=ban%>&userName=<%=userName%>&unlimited=<%=unlimited%>');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -52,7 +55,7 @@
                         case "<%=TwitchChannelConstants.ONCHANNELMESSAGE%>":
                             eventType = "Message ";
                             break;
-                        case "<%=TwitchChannelConstants.ONDELETEMESSAAGE%>":
+                        case "<%=TwitchChannelConstants.ONDELETEMESSAGE%>":
                             eventType = "Delete ";
                             break;
                         case "<%=TwitchChannelConstants.ONUSERBAN%>":
@@ -62,7 +65,7 @@
                     }
                     
                     eventElement.innerHTML = eventType + ' Event: ' + event.createdDate + ' <a href="https://www.twitch.tv/' + event.twitchUser +'">' + event.twitchUser + '</a>: ' + event.message;
-                    if(event.eventType === "<%=TwitchChannelConstants.ONUSERBAN%>" || event.eventType === "<%=TwitchChannelConstants.ONDELETEMESSAAGE%>") {
+                    if(event.eventType === "<%=TwitchChannelConstants.ONUSERBAN%>" || event.eventType === "<%=TwitchChannelConstants.ONDELETEMESSAGE%>") {
                         eventElement.style.color = "red";
                     }
                     eventsContainer.appendChild(eventElement);
@@ -80,10 +83,18 @@
     </script>
 </head>
 <body onload="startEventUpdates()">
-    <div id="status">Waiting for events...</div> <!-- Status div to be updated on new events -->
+	<div id="status">Waiting for events...</div>
+	<!-- Status div to be updated on new events -->
 
-<%if(ban){ %>Deleted Messages<%} else{ %>All Messages<%} %>
-    <h1>Channel Events</h1>
-    <div id="events"></div> <!-- Container for events -->
+	<%
+	if (ban) {
+	%>Deleted Messages<%
+	} else {
+	%>All Messages<%
+	}
+	%>
+	<h1>Channel Events</h1>
+	<div id="events"></div>
+	<!-- Container for events -->
 </body>
 </html>
