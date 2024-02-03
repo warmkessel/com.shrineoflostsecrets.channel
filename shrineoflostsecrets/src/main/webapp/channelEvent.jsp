@@ -32,7 +32,7 @@
 		%>
 		<tr>
 			<td><%=DateFormatter.convertToHourAndMin(channelEvent.getCreatedDate())%><td>
-			<td><a href="/* URL here! */"><%=channelEvent.getTwitchUser()%></a>
+			<td><a href="./channelEventDynamic.jsp?channel=<%=requestChannel%>&userName=<%=channelEvent.getTwitchUser()%>"><%=channelEvent.getTwitchUser()%></a>
 			</td>
 			<td>
 				<%
