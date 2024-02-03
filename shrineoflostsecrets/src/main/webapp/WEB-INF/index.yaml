@@ -6,3 +6,18 @@ indexes:
       - name: TwitchChannel
       - name: CreatedDate
         direction: desc
+  - kind: ShrineChannelEvent
+    properties:
+      - name: Deleted
+      - name: EventType      
+      - name: TwitchUserName
+      - name: CreatedDate
+        direction: desc
+  - kind: ShrineChannelEvent
+    properties:
+      - name: Deleted
+      - name: EventType      
+      - name: TwitchChannel
+      - name: TwitchUserName
+      - name: CreatedDate
+        direction: desc

@@ -40,15 +40,17 @@ public class ShrineChannelEventList {
 		Filter baseFilter = PropertyFilter.eq(TwitchChannelConstants.DELETED, false);
 
 		// Add channel filter if provided
-		if (channel != null && !channel.isEmpty()) {
+		if (channel != null && !channel.isEmpty() && !channel.equals("null")) {
 			baseFilter = CompositeFilter.and(baseFilter,
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel));
 		}
+
 		// Add userName filter if provided
-		if (userName != null && !userName.isEmpty()) {
+		if (userName != null && !userName.isEmpty() && !userName.equals("null")) {
 			baseFilter = CompositeFilter.and(baseFilter,
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHUSERNAME, userName));
 		}
+
 		// Add filters based on the ban flag
 
 		if (ban != null && ban) {
@@ -66,10 +68,6 @@ public class ShrineChannelEventList {
 		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
 				.setFilter(baseFilter).setOrderBy(OrderBy.desc(TwitchChannelConstants.CREATEDDATE)).build();
 
-		// Note: Setting a limit directly in the query builder is not shown here.
-		// Limits are typically applied when fetching the results using the query
-		// object.
-		logger.info("query {}", query.toString());
 
 		return query;
 	}

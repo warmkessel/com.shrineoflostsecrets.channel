@@ -17,9 +17,6 @@ public class ShrinehannelService{
 	public static List<Entity> listChannels() {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 
-//				Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNEL)
-//						.setFilter(CompositeFilter.and(
-//								PropertyFilter.eq(TwitchChannelConstants.DELETED, false)))
 		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNEL)
 						.build();
 		// Run the query and retrieve a list of matching entities

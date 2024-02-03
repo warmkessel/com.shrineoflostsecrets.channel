@@ -13,7 +13,7 @@ JSONArray jsonEvents = new JSONArray();
 
 try {
     List<Entity> listChannels = null;
-    listChannels = ShrineChannelEventList.listChanelEvents(requestChannel, "", false, false);
+    listChannels = ShrineChannelEventList.listChanelEvents(requestChannel, userName, ban, unlimited);
     for (Entity entity : listChannels) {
         ShrineChannelEvent channelEvent = new ShrineChannelEvent();
         channelEvent.loadFromEntity(entity);
