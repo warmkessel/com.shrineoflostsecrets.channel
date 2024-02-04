@@ -12,7 +12,7 @@ import com.google.common.collect.Lists;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 
 
-public class ShrinehannelService{
+public class ShrineChannelService{
 	
 	public static List<Entity> listChannels() {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
@@ -25,10 +25,10 @@ public class ShrinehannelService{
 		return entities;
 	}		
 	
-	public static Entity getShrineChannelName(String channelName) {
+	public static Entity getShrineChannelName(String channel) {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNEL)
-				.setFilter( PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channelName)).build();
+				.setFilter( PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel)).build();
 		// Run the query and retrieve a list of matching entities
 		QueryResults<Entity> results = datastore.run(query);
 		List<Entity> entities = Lists.newArrayList(results);
@@ -39,5 +39,7 @@ public class ShrinehannelService{
 			return entities.get(0);
 		}
 	}
+	
+	
 
 }

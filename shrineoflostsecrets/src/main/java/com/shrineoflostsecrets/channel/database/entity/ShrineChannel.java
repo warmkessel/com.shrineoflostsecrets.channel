@@ -12,7 +12,7 @@ import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.shrineoflostsecrets.channel.constants.Constants;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
-import com.shrineoflostsecrets.channel.database.datastore.ShrinehannelService;
+import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelService;
 
 public class ShrineChannel extends BaseEntity implements Comparable<ShrineChannel> {
 
@@ -259,7 +259,7 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 		return TwitchChannelConstants.SHRINECHANNEL;
 	}
 	public static ShrineChannel getShrineChannelName(String channelName) {
-		Entity entities = ShrinehannelService.getShrineChannelName(channelName);
+		Entity entities = ShrineChannelService.getShrineChannelName(channelName);
 		if(entities == null) {
 			ShrineChannel theReturn = new ShrineChannel();
 			theReturn.save();

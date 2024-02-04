@@ -64,7 +64,7 @@ String channel = (requestChannel != null && !requestChannel.isEmpty()) ? request
                         // No default case needed since eventType is initialized with the event's type
                     }
                     
-                    eventElement.innerHTML = eventType + ' Event: ' + event.createdDate + ' <a href="./channelEventDynamic.jsp?channel=<%=requestChannel%>&userName=' + event.twitchUser +'">' + event.twitchUser + '</a>: ' + event.message;
+                    eventElement.innerHTML = eventType + ' Event: ' + event.createdDate + ' <a href="./channelEventDynamic.jsp?channel=<%=channel%>&userName=' + event.twitchUser +'">' + event.twitchUser + '</a> <a href="/service/voteEvent.jsp?id='+event.id+'&channel=<%=channel%>&userName=<%=userName %>&amount=100">Vote!</a> : ' + event.message;
                     if(event.eventType === "<%=TwitchChannelConstants.ONUSERBAN%>" || event.eventType === "<%=TwitchChannelConstants.ONDELETEMESSAGE%>") {
                         eventElement.style.color = "red";
                     }

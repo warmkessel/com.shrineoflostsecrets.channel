@@ -4,7 +4,6 @@
 	import="java.util.*, com.google.cloud.datastore.*, com.google.appengine.api.users.*, com.shrineoflostsecrets.channel.database.datastore.*, com.shrineoflostsecrets.channel.constants.*, com.shrineoflostsecrets.channel.database.entity.*"%>
 
 <%
-
 UserService userService = UserServiceFactory.getUserService();
 User currentUser = userService.getCurrentUser();
 
@@ -48,7 +47,7 @@ if (twitchChannelName != null && discordChannelName != null) {
 	channel.setTwitchLastEnd(twitchLastEndStr);
 	channel.save(); // Save the new channel
 }
-List<Entity> listChannels = ShrinehannelService.listChannels(); // Retrieve list of ShrineChannel
+List<Entity> listChannels = ShrineChannelService.listChannels(); // Retrieve list of ShrineChanne
 %>
 
 <!DOCTYPE html>

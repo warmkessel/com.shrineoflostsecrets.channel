@@ -21,7 +21,12 @@
 		String userName = request.getParameter("userName");
 		String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
 		%>
-		<%=channel%>
+		Channel:<%=channel%>
+		<br>
+		<%if(ban){ %><a href="./channelEventDynamic.jsp?channel=<%=channel %>&ban=false">Show only All Messages</a></td>
+		<%}else{ %>
+		<a href="./channelEventDynamic.jsp?channel=<%=channel %>&ban=true">Show only Deleted Messages</a></td>
+		<%}%>
 		<%
 				try {
 					List<Entity> listChannels = ShrineChannelEventList.listChanelEvents(channel, userName, ban,
@@ -32,16 +37,15 @@
 		%>
 		<tr>
 			<td><%=DateFormatter.convertToHourAndMin(channelEvent.getCreatedDate())%><td>
-			<td><a href="./channelEventDynamic.jsp?channel=<%=requestChannel%>&userName=<%=channelEvent.getTwitchUser()%>"><%=channelEvent.getTwitchUser()%></a>
-			</td>
-			<td>
+			<td><a href="./channelEventDynamic.jsp?channel=<%=requestChannel%>&userName=<%=channelEvent.getTwitchUser()%>"><%=channelEvent.getTwitchUser()%></a></td>
+			<td><a href="/service/voteEvent.jsp?id=<%=channelEvent.getId() %>&channel=<%=channelEvent.getTwitchChannel() %>&userName=<%=channelEvent.getTwitchUser() %>&amount=100">Vote!</a></td><td>
 				<%
 				if (TwitchChannelConstants.ONUSERBAN.equals(channelEvent.getEventType())) {
 				%>
 				User Banned <%
 				} else if (TwitchChannelConstants.ONDELETEMESSAGE.equals(channelEvent.getEventType())) {
 				%>
-				<b><%=channelEvent.getMessage()%></b> <%
+				<span style=eventElement.style.color:"red"><%=channelEvent.getMessage()%></span><%
 				} else if (TwitchChannelConstants.ONCHANNELMESSAGEELEVATED.equals(channelEvent.getEventType())) {
 				%>
 				Elevated Sub<i><%=channelEvent.getMessage()%></i> <%

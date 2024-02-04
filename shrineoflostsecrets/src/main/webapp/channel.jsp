@@ -17,10 +17,11 @@
   gtag('config', 'G-N2VTBWYNCJ');
 </script>
 <body>
+ni
 <table>
 
 <%
-List<Entity> listChanels = ShrinehannelService.listChannels();
+List<Entity> listChanels = ShrineChannelService.listChannels();
     	for(Entity entity: listChanels) {
     		ShrineChannel channel = new ShrineChannel();
     		channel.loadFromEntity(entity);
@@ -29,7 +30,7 @@ List<Entity> listChanels = ShrinehannelService.listChannels();
 <tr>
 <td><a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>">Twitch <%if(live){%>LIVE!<%}%></a></td>
 <td><a href="<%if(live){%>channelEventDynamic.jsp<%}else{ %>channelEvent.jsp<%}%>?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
-<td><a href="channelEventDynamic.jsp?channel=<%=channel.getTwitchChannel() %>&ban=true">Deleted</a></td>
+<td><a href="channelVotes.jsp?channel=<%=channel.getTwitchChannel()%>">Score Board!</a></td>
 </tr>
 <%}%>
 </table>

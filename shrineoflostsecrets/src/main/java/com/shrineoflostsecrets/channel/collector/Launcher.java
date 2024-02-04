@@ -12,7 +12,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.cloud.datastore.Entity;
-import com.shrineoflostsecrets.channel.database.datastore.ShrinehannelService;
+import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelService;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 
 public class Launcher {
@@ -31,7 +31,7 @@ public class Launcher {
         logger.info("Client Secret: [PROTECTED]");
         logger.info("Debug: {}", DEBUG);
 
-        List<Entity> listChannels = ShrinehannelService.listChannels();
+        List<Entity> listChannels = ShrineChannelService.listChannels();
         
         for(Entity entity: listChannels) {
             ShrineChannel channel = new ShrineChannel();

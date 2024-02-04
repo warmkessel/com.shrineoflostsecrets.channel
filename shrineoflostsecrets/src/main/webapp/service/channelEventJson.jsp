@@ -19,6 +19,7 @@ try {
         channelEvent.loadFromEntity(entity);
 
         JSONObject jsonEvent = new JSONObject();
+        jsonEvent.put("id", channelEvent.getId());
         jsonEvent.put("createdDate", DateFormatter.convertToHourAndMin(channelEvent.getCreatedDate()));
         jsonEvent.put("twitchUser", channelEvent.getTwitchUser());
         jsonEvent.put("eventType", channelEvent.getEventType());
