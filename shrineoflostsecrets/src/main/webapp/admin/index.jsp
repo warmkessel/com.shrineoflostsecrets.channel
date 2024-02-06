@@ -1,7 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
-<%@ page import="com.shrineoflostsecrets.channel.database.entity.*"%>
 <%@ page import="com.google.appengine.api.users.*"%>
 <%
     UserService userService = UserServiceFactory.getUserService();
@@ -16,4 +15,4 @@
 						%> <a
 						href="<%=userService.createLoginURL("/index.jsp")%>"
 						class="btn btn-primary btn-sm">Login/Register</a> <%}%>
-<a href="./channel.jsp">Channel List</a>
+<a href="./channel.jsp">Channel List</a><a href="./user.jsp">User List</a>
