@@ -44,5 +44,7 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String ONGOOFFLINEEVENT = "onGoOfflineEvent";
 	public static final String ONGOLIVEEVENT = "onGoLiveEvent";
 	public static final String ONUSERBAN = "onUseBan";
+	
+	public static final String[] BOTS = {"moobot", "nightbot","streamelements"};
 
 }	
