@@ -26,6 +26,7 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String SHRINEVOTECATEGORY = "ShrineVoteCategory";
 	public static final String SHRINENOMINATIONDATE = "ShrineNominationDate";
 	public static final String SHRINECHANNELEVENTID = "shrineChannelEventId";
+	public static final String SAFE = "Safe";
 
 	
 

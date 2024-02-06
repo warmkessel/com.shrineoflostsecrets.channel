@@ -23,6 +23,7 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 	private static final long serialVersionUID = -361472214131790072L;
 	private static final Logger logger = LoggerFactory.getLogger(ShrineVote.class);
 
+	private boolean safe = false;
 	private long shrineChannelEventId = 0l;
 	private String twitchUser = "";
 	private String twitchChannel = "";
@@ -55,6 +56,13 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 
 	public void setVoteDate(Date voteDate) {
 		setVoteDate(Timestamp.of(voteDate));
+	}
+	public boolean isSafe() {
+		return safe;
+	}
+
+	public void setSafe(boolean safe) {
+		this.safe = safe;
 	}
 
 	public void setVoteDate(String voteDate) {
@@ -143,8 +151,8 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 				.set(TwitchChannelConstants.SHRINEVOTEAMOUNT, getAmount())
 				.set(TwitchChannelConstants.SHRINEVOTEDATE, getVoteDate())
 				.set(TwitchChannelConstants.SHRINEVOTECATEGORY, getShrineVoteCategoryId())
-				.set(TwitchChannelConstants.SHRINECHANNELEVENTID, getShrineChannelEventId());
-
+				.set(TwitchChannelConstants.SHRINECHANNELEVENTID, getShrineChannelEventId())
+				.set(TwitchChannelConstants.SAFE, isSafe());
 		getDatastore().put(entity.build());
 	}
 
@@ -163,6 +171,9 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 			setVoteDate(entity.getTimestamp(TwitchChannelConstants.SHRINEVOTEDATE));
 			setShrineVoteCategoryId(entity.getLong(TwitchChannelConstants.SHRINEVOTECATEGORY));
 			setShrineChannelEventId(entity.getLong(TwitchChannelConstants.SHRINECHANNELEVENTID));
+			if (entity.contains(TwitchChannelConstants.SAFE)) {
+				setSafe(entity.getBoolean(TwitchChannelConstants.SAFE));
+			}
 
 		}
 	}
@@ -174,6 +185,7 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 				+ TwitchChannelConstants.SHRINEVOTEDATE + "\"='" + voteDate + '\'' + ", "
 				+ TwitchChannelConstants.SHRINEVOTEAMOUNT + "\"='" + amount + '\'' + ", "
 				+ TwitchChannelConstants.SHRINEVOTECATEGORY + "\"='" + shrineVoteCategoryId + '\'' + ", "
+				+ TwitchChannelConstants.SAFE + "\"='" + safe + '\'' + ", "
 				+ TwitchChannelConstants.SHRINECHANNELEVENTID + "\"='" + shrineChannelEventId + '\'' + '}';
 	}
 
@@ -219,4 +231,6 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 	public void setShrineChannelEventId(long shrineChannelEventId) {
 		this.shrineChannelEventId = shrineChannelEventId;
 	}
+
+	
 }

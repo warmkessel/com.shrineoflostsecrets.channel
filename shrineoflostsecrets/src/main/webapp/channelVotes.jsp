@@ -25,8 +25,8 @@
 		try {
 			Map<Long, Long> scoreMap = new HashMap<>();
 
-			List<Entity> listChannels = ShrineVoteService.listVotes(channel);
-			for (Entity entity : listChannels) {
+			List<Entity> listVotes = ShrineVoteService.listVotes(channel);
+			for (Entity entity : listVotes) {
 			    ShrineVote vote = new ShrineVote();
 			    vote.loadFromEntity(entity);
 			    // Use an anonymous class instead of a lambda expression
@@ -37,7 +37,7 @@
 			        }
 			    });
 			}
-			%>size <%=listChannels.size() %><%
+			%>size <%=listVotes.size() %><%
 			 // Convert the entry set of the map to a list
 		    List<Map.Entry<Long, Long>> sortedEntries = new ArrayList<>(scoreMap.entrySet());
 		    // Sort the list by values in descending order without using lambda expressions
