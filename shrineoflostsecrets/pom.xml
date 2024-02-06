@@ -4,10 +4,8 @@
 	<modelVersion>4.0.0</modelVersion>
 	<packaging>war</packaging>
 	<version>1.0-SNAPSHOT</version>
-
 	<groupId>com.shrineoflostsecrets</groupId>
 	<artifactId>ShrineOfLostSecrets</artifactId>
-
 	<dependencies>
 		<dependency>
 			<groupId>net.dv8tion</groupId>
@@ -40,6 +38,11 @@
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
 			<version>1.2.3</version>
+		</dependency>
+		<dependency>
+			<groupId>org.json</groupId>
+			<artifactId>json</artifactId>
+			<version>20231013</version>
 		</dependency>
 	</dependencies>
 	<build>
