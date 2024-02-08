@@ -6,6 +6,8 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String SHRINECHANNEL = "ShrineChannel";
 	public static final String SHRINEVOTE = "ShrineVote";
 
+	public static final String TWITCHUSERID = "TwitchUserId";
+	public static final String TWITCHUSERDDISPLAYNAME = "TwitchUserDisplayName";
 	public static final String TWITCHUSERNAME = "TwitchUserName";
 	public static final String DISCORDUSERNAME = "DiscordUserName";
 	public static final String TWITCHFOLLOW = "TwitchFollow";
@@ -47,6 +49,7 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String ONGOOFFLINEEVENT = "onGoOfflineEvent";
 	public static final String ONGOLIVEEVENT = "onGoLiveEvent";
 	public static final String ONUSERBAN = "onUseBan";
+	public static final String ONUSERFOLLOW = "onUserFollow";
 	
 	public static final String[] BOTS = {"moobot", "nightbot","streamelements"};
 

@@ -1,10 +1,11 @@
 package com.shrineoflostsecrets.channel.collector.twitch;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
+import javax.security.auth.login.LoginException;
 
 import com.github.philippheuer.events4j.api.domain.IDisposable;
 import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.twitch4j.TwitchClient;
+import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.chat.events.channel.ChannelJoinEvent;
 import com.github.twitch4j.chat.events.channel.ChannelLeaveEvent;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
@@ -14,12 +15,11 @@ import com.github.twitch4j.events.ChannelGoLiveEvent;
 import com.github.twitch4j.events.ChannelGoOfflineEvent;
 import com.github.twitch4j.pubsub.events.RewardRedeemedEvent;
 import com.shrineoflostsecrets.channel.collector.Launcher;
-import com.shrineoflostsecrets.channel.collector.TwitchStream;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
-import com.shrineoflostsecrets.channel.database.entity.ShrineChannelEvent;
+import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 
 public class ShrineCapture extends ServiceAbstract {
-	private static final Logger logger = LoggerFactory.getLogger(ShrineCapture.class);
+//	private static final Logger logger = LoggerFactory.getLogger(ShrineCapture.class);
 
 	IDisposable handlerReg = null;
 
@@ -29,30 +29,36 @@ public class ShrineCapture extends ServiceAbstract {
 	 * @param eventManager EventManager
 	 */
 
-	public ShrineCapture(TwitchStream twitchStream) {
-		super(twitchStream);
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
+	/**
+	 * Constructor
+	 */
+	public ShrineCapture(ShrineChannel channel) throws LoginException, InterruptedException {
+		super(channel);
+
+		getTwitchClient().getChat().joinChannel(getChannel().getTwitchChannel());
+
+		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
 				.onEvent(ChannelGoOfflineEvent.class, this::onGoOfflineEvent);
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(ChannelGoLiveEvent.class, this::onGoLiveEvent);
+		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(ChannelGoLiveEvent.class,
+				this::onGoLiveEvent);
 
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(ChannelMessageEvent.class, this::onChannelMessage);
+		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(ChannelMessageEvent.class,
+				this::onChannelMessage);
 
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(DeleteMessageEvent.class, this::onDeleteMessageEvent);
+		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(DeleteMessageEvent.class,
+				this::onDeleteMessageEvent);
 
-		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(UserBanEvent.class, this::onUserBanEvent);
+		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(UserBanEvent.class,
+				this::onUserBanEvent);
 
-//		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-//				.onEvent(ChannelJoinEvent.class, this::onChannelJoinEvent);
+//twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
+//		.onEvent(ChannelJoinEvent.class, this::onChannelJoinEvent);
 
-//		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-//				.onEvent(ChannelLeaveEvent.class, this::onChannelLeaveEvent);
+//twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
+//		.onEvent(ChannelLeaveEvent.class, this::onChannelLeaveEvent);
 //
-//		twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-//				.onEvent(RewardRedeemedEvent.class, this::onRewardRedeemedEvent);
+//twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
+//		.onEvent(RewardRedeemedEvent.class, this::onRewardRedeemedEvent);
 //
 	}
 
@@ -69,11 +75,10 @@ public class ShrineCapture extends ServiceAbstract {
 	public void onChannelJoinEvent(ChannelJoinEvent event) {
 		log(TwitchChannelConstants.ONCHANNELJOINEVENT, event.getEventId(), event.getChannel().getName(),
 				event.getUser().getName(), "");
-
 	}
 
 	public void onChannelLeaveEvent(ChannelLeaveEvent event) {
-		log(TwitchChannelConstants.ONCHANNELMESSAGEELEVATED, event.getEventId(), event.getChannel().getName(),
+		log(TwitchChannelConstants.ONCHANNELLEAVEEVENT, event.getEventId(), event.getChannel().getName(),
 				event.getUser().getName(), "");
 	}
 
@@ -90,7 +95,8 @@ public class ShrineCapture extends ServiceAbstract {
 	public void onChannelMessage(ChannelMessageEvent event) {
 		if (event.getElevatedChatPayment().isPresent()) {
 			log(TwitchChannelConstants.ONCHANNELMESSAGEELEVATED, event.getEventId(), event.getChannel().getName(),
-					event.getUser().getName(), event.getMessage(), event.getElevatedChatPayment().get().getValue().toString());
+					event.getUser().getName(), event.getMessage(),
+					event.getElevatedChatPayment().get().getValue().toString());
 		} else {
 			log(TwitchChannelConstants.ONCHANNELMESSAGE, event.getEventId(), event.getChannel().getName(),
 					event.getUser().getName(), event.getMessage());
@@ -106,46 +112,32 @@ public class ShrineCapture extends ServiceAbstract {
 
 	public void onGoOfflineEvent(ChannelGoOfflineEvent event) {
 		log(TwitchChannelConstants.ONGOOFFLINEEVENT, event.getEventId(), event.getChannel().getName());
-		getTwitchStream().getShrineChannel().setTwitchLastEnd();
-		getTwitchStream().getShrineChannel().save();
+		getChannel().setTwitchLastEnd();
+		getChannel().save();
 	}
 
 	public void onGoLiveEvent(ChannelGoLiveEvent event) {
 		log(TwitchChannelConstants.ONGOLIVEEVENT, event.getEventId(), event.getChannel().getName());
-		getTwitchStream().getShrineChannel().setTwitchLastStart();
-		getTwitchStream().getShrineChannel().save();
+		getChannel().setTwitchLastStart();
+		getChannel().save();
 
 	}
 
-	private void log(String eventType, String eventId, String twitchChannel) {
-		log(eventType, eventId, twitchChannel, "", "", "", "", "");
+	public TwitchClient buildTwitchClient() {
+		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
+
+		TwitchClient twitchClient = clientBuilder.withEnableHelix(true).withClientId(Launcher.CLIENT_ID)
+				.withClientSecret(Launcher.CLIENT_SECRET).withEnableChat(true).withEnablePubSub(true)
+				// .withEnableTMI(true)
+				// .withEnableKraken(true)
+				.build();
+
+		twitchClient.getClientHelper().enableStreamEventListener(getChannel().getTwitchChannel());
+//		twitchClient.getPubSub().listenForChannelPointsRedemptionEvents(credential, "149223493");
+		return twitchClient;
+	}
+	public String getServiceName() {
+		return getClass().getName();
 	}
 
-	private void log(String eventType, String eventId, String twitchChannel, String twitchUser, String message) {
-		log(eventType, eventId, twitchChannel, twitchUser, message, "", "", "");
-	}
-
-	private void log(String eventType, String eventId, String twitchChannel, String twitchUser, String message,
-			String elevatedChatPayment) {
-		log(eventType, eventId, twitchChannel, twitchUser, message, elevatedChatPayment, "", "");
-
-	}
-
-	private void log(String eventType, String eventId, String twitchChannel, String twitchUser, String message,
-			String elevatedChatPayment, String redeemTime, String rewared) {
-		logger.info("{}: {} {} {} {} {} {} {}", eventType, eventId, twitchUser, twitchChannel, message,
-				elevatedChatPayment, rewared, redeemTime);
-		ShrineChannelEvent ts = new ShrineChannelEvent();
-		ts.setEventType(eventType);
-		ts.setEventId(eventId);
-		ts.setTwitchUser(twitchUser);
-		ts.setTwitchChannel(twitchChannel);
-		ts.setElevatedChatPayment(elevatedChatPayment);
-		ts.setRewared(rewared);
-		ts.setRedeemTime(redeemTime);
-		ts.setMessage(message);
-		if(!Launcher.DEBUG.equalsIgnoreCase("true")) {
-			ts.save();
-		}
-	}
 }

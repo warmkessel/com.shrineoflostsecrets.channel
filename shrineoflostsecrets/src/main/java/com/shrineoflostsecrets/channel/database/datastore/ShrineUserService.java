@@ -54,5 +54,19 @@ public class ShrineUserService{
 			return entities.get(0);
 		}
 	}
+	public static Entity fetchUserAuth(String twitchUserName) {
+		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINEUSER)
+				.setFilter( PropertyFilter.eq(TwitchChannelConstants.TWITCHUSERNAME, twitchUserName)).build();
+		// Run the query and retrieve a list of matching entities
+		QueryResults<Entity> results = datastore.run(query);
+		List<Entity> entities = Lists.newArrayList(results);
+		if(entities.size() == 0) {
+			return null;
+		}
+		else{
+			return entities.get(0);
+		}
+	}
 
 }

@@ -16,19 +16,22 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 	// private static final Logger log =
 	// Logger.getLogger(TwitchStream.class.getName());
 
+	private String twitchUserId = "";
 	private String twitchUserName = "";
 	private String otpPass = "";
 	private Timestamp shrineLastLongedIn = Timestamp.now();
 
 	public ShrineUser() {
 	}
-
-	public void loadShrinePass(String pass) {
+	public boolean isValue() {
+		return (getTwitchUserName() != null && getTwitchUserName().length() > 0);
+	}
+	public void loadShrineOTP(String pass) {
 		loadFromEntity(ShrineUserService.fetchPass(pass));
 	}
 
 	public void loadShrineUserName(String pass) {
-		loadFromEntity(ShrineUserService.fetchUser(pass));
+			loadFromEntity(ShrineUserService.fetchUser(pass));
 	}
 	public void loadShrineUser(String key) {
 		loadShrineUser(Long.parseLong(key));
@@ -71,7 +74,13 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 	public void setShrineLastLongedIn(Timestamp shrineLastLongedIn) {
 		this.shrineLastLongedIn = shrineLastLongedIn;
 	}
+	public String getTwitchUserId() {
+		return twitchUserId;
+	}
 
+	public void setTwitchUserId(String twitchUserId) {
+		this.twitchUserId = twitchUserId;
+	}
 	@Override
 	public boolean equals(Object obj) {
 		if (this == obj) {
@@ -98,6 +107,7 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 		entity.set(TwitchChannelConstants.DELETED, getDeleted())
 				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate())
 				.set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
+				.set(TwitchChannelConstants.TWITCHUSERID, getTwitchUserId())
 				.set(TwitchChannelConstants.TWITCHUSERNAME, getTwitchUserName())
 				.set(TwitchChannelConstants.SHRINELASTLOGGED, getShrineLastLongedIn())
 				.set(TwitchChannelConstants.OTPPASS, getOtpPass()).build();
@@ -123,14 +133,16 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 	public void loadFromEntity(Entity entity) {
 		super.loadFromEntity(entity);
 		if (null != entity) {
-			setTwitchUserName(entity.getString(TwitchChannelConstants.TWITCHUSERNAME));
 			setOtpPass(entity.getString(TwitchChannelConstants.OTPPASS));
 			setShrineLastLongedIn(entity.getTimestamp(TwitchChannelConstants.SHRINELASTLOGGED));
+			setTwitchUserName(entity.getString(TwitchChannelConstants.TWITCHUSERNAME));
+			setTwitchUserId(entity.getString(TwitchChannelConstants.TWITCHUSERID));
 		}
 	}
 
 	public String toString() {
 		return "TwitchStream{" + "" + Constants.KEY + "='" + getKeyString() + '\'' + ", "
+				+ TwitchChannelConstants.TWITCHUSERID + "\"='" + twitchUserName + '\''
 				+ TwitchChannelConstants.TWITCHUSERNAME + "\"='" + twitchUserName + '\''
 				+ TwitchChannelConstants.SHRINELASTLOGGED + "\"='" + shrineLastLongedIn + '\''
 				+ TwitchChannelConstants.OTPPASS + "\"='" + otpPass + '\'' + '}';
@@ -151,4 +163,6 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 	public String getEventKind() {
 		return TwitchChannelConstants.SHRINEUSER;
 	}
+
+	
 }

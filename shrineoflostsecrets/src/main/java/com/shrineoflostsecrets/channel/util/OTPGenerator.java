@@ -9,6 +9,10 @@ public class OTPGenerator {
     private static final String UPPER_ALPHABETS = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
     private static final String SPECIAL_CHARACTERS = "!@#$%^&*_=+-/.?<>)";
 
+    public static String generateOTP(){
+    	return generateOTP(8, false);
+    }
+    
     // Method to generate OTP
     public static String generateOTP(int length, boolean useSpecialChars) {
         // Create a StringBuilder to store the OTP

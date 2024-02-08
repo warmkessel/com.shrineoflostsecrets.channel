@@ -199,6 +199,9 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 				.set(TwitchChannelConstants.TWITCHLASTEND, getTwitchLastEnd()).build();
 		getDatastore().put(entity.build());
 	}
+	public void loadShrineChannelName(String name) {
+		loadFromEntity(ShrineChannelService.getShrineChannelName(name));
+	}
 	public void loadShrineChannel(String key) {
 		loadShrineChannel(Long.parseLong(key));
 	}
