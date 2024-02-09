@@ -3,30 +3,34 @@ package com.shrineoflostsecrets.channel.collector.twitch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.shrineoflostsecrets.channel.collector.Launcher;
-import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelService;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannelEvent;
 
 public abstract class ServiceAbstract {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceAbstract.class);
 
-	private TwitchClient twitchClient = null;
 	private ShrineChannel channel = null;
+	OAuth2Credential credential = null;
 
+	
 	public ServiceAbstract(ShrineChannel channel) {
 		this.channel = channel;
-		this.twitchClient = buildTwitchClient();
 
 	}
-	abstract public TwitchClient buildTwitchClient();
+	public OAuth2Credential getCredential () {
+		if(null == credential) {
+			credential = initCred();
+		}
+		return credential;
+	}
+	abstract public OAuth2Credential initCred();
+	abstract public TwitchClient getTwitchClient();
 	abstract public String getServiceName();
 
-	public TwitchClient getTwitchClient() {
-		return twitchClient;
-	}
-
+	
 	public ShrineChannel getChannel() {
 		return channel;
 	}

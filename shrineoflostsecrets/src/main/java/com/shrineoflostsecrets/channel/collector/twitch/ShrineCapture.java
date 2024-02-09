@@ -2,8 +2,9 @@ package com.shrineoflostsecrets.channel.collector.twitch;
 
 import javax.security.auth.login.LoginException;
 
+import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.api.domain.IDisposable;
-import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.philippheuer.events4j.reactor.ReactorEventHandler;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.chat.events.channel.ChannelJoinEvent;
@@ -35,20 +36,25 @@ public class ShrineCapture extends ServiceAbstract {
 	public ShrineCapture(ShrineChannel channel) throws LoginException, InterruptedException {
 		super(channel);
 
-		getTwitchClient().getChat().joinChannel(getChannel().getTwitchChannel());
+		TwitchClient client = getTwitchClient();
 
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
-				.onEvent(ChannelGoOfflineEvent.class, this::onGoOfflineEvent);
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(ChannelGoLiveEvent.class,
+		client.getClientHelper().enableStreamEventListener(getChannel().getTwitchChannel());
+		client.getChat().joinChannel(getChannel().getTwitchChannel());
+
+		client.getChat().joinChannel(getChannel().getTwitchChannel());
+
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(ChannelGoOfflineEvent.class,
+				this::onGoOfflineEvent);
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(ChannelGoLiveEvent.class,
 				this::onGoLiveEvent);
 
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(ChannelMessageEvent.class,
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(ChannelMessageEvent.class,
 				this::onChannelMessage);
 
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(DeleteMessageEvent.class,
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(DeleteMessageEvent.class,
 				this::onDeleteMessageEvent);
 
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(UserBanEvent.class,
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(UserBanEvent.class,
 				this::onUserBanEvent);
 
 //twitchStream.getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class)
@@ -87,6 +93,7 @@ public class ShrineCapture extends ServiceAbstract {
 				event.getUserName(), event.getMessage());
 	}
 
+	@SuppressWarnings("deprecation")
 	public void onUserBanEvent(UserBanEvent event) {
 		log(TwitchChannelConstants.ONUSERBAN, event.getEventId(), event.getChannel().getName(),
 				event.getUser().getName(), event.getReason());
@@ -123,19 +130,19 @@ public class ShrineCapture extends ServiceAbstract {
 
 	}
 
-	public TwitchClient buildTwitchClient() {
-		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
+	public OAuth2Credential initCred() {
+		return null;
+	}
 
-		TwitchClient twitchClient = clientBuilder.withEnableHelix(true).withClientId(Launcher.CLIENT_ID)
+	public TwitchClient getTwitchClient() {
+		return TwitchClientBuilder.builder().withEnableHelix(true).withClientId(Launcher.CLIENT_ID)
 				.withClientSecret(Launcher.CLIENT_SECRET).withEnableChat(true).withEnablePubSub(true)
+				.withDefaultEventHandler(ReactorEventHandler.class)
 				// .withEnableTMI(true)
 				// .withEnableKraken(true)
 				.build();
-
-		twitchClient.getClientHelper().enableStreamEventListener(getChannel().getTwitchChannel());
-//		twitchClient.getPubSub().listenForChannelPointsRedemptionEvents(credential, "149223493");
-		return twitchClient;
 	}
+
 	public String getServiceName() {
 		return getClass().getName();
 	}

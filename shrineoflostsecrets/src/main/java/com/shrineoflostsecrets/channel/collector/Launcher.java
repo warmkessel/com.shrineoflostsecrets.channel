@@ -49,15 +49,15 @@ public class Launcher {
 		channel.loadShrineChannelName("shrineoflostsecrets");
 		new ShrineResponder(channel);
 		logger.info("ShrineResponder Loaded: {}", channel.getTwitchChannel());
-//
-//		List<Entity> listChannels = ShrineChannelService.listChannels();
-//
-//		for (Entity entity : listChannels) {
-//			channel = new ShrineChannel();
-//			channel.loadFromEntity(entity);
-//			new ShrineCapture(channel);
-//
-//			logger.info("ShrineCapture Loaded: {}", channel.getTwitchChannel());
-//		}
+
+		List<Entity> listChannels = ShrineChannelService.listChannels();
+
+		for (Entity entity : listChannels) {
+			channel = new ShrineChannel();
+			channel.loadFromEntity(entity);
+			new ShrineCapture(channel);
+
+			logger.info("ShrineCapture Loaded: {}", channel.getTwitchChannel());
+		}
 	}
 }

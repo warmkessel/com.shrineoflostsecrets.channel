@@ -83,6 +83,8 @@ String channel = (requestChannel != null && !requestChannel.isEmpty()) ? request
     </script>
 </head>
 <body onload="startEventUpdates()">
+		<a href="<%=JSPConstants.CHANNELEVENTDYNAMIC%>?channel=<%=channel%>&ban=<%=!ban%>">Toggle Ban</a>
+		<a href="<%=JSPConstants.CHANNELEVENT%>?channel=<%=channel%>&ban=<%=ban%>">Static</a>
 	<div id="status">Waiting for events...</div>
 	<!-- Status div to be updated on new events -->
 

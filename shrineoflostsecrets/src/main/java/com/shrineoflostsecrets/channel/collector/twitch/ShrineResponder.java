@@ -6,7 +6,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
-import com.github.philippheuer.events4j.simple.SimpleEventHandler;
+import com.github.philippheuer.events4j.reactor.ReactorEventHandler;
 import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
@@ -23,7 +23,6 @@ public class ShrineResponder extends ServiceAbstract {
 	// user:read:follows moderator:read:followers'
 
 	//
-	OAuth2Credential credential = null;
 	IEventSubSocket eventSocket = null;
 
 	/**
@@ -31,38 +30,57 @@ public class ShrineResponder extends ServiceAbstract {
 	 *
 	 * @param eventManager EventManager
 	 */
+	TwitchClient client = null;
 
 	public ShrineResponder(ShrineChannel channel) throws LoginException, InterruptedException {
 		super(channel);
-		getTwitchClient().getChat().joinChannel(getChannel().getTwitchChannel());
+		
+//		// credential manager
+//		CredentialManager credentialManager = CredentialManagerBuilder.builder().build();
+//		credentialManager.registerIdentityProvider(new TwitchIdentityProvider(Launcher.CLIENT_ID,
+//				Launcher.CLIENT_SECRET, ""));
+//		// twitch4j - chat
+//		TwitchChat client = TwitchChatBuilder.builder()
+//		        .withCredentialManager(credentialManager)
+//		        .withChatAccount(initCred())
+//		        .build();
+//
+//
+//
+//		client.sendMessage("shrineoflostsecrets", "I am live2!");
 
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(ChannelMessageEvent.class,
+		client = getTwitchClient();
+
+		client.getClientHelper().enableFollowEventListener(getChannel().getTwitchChannel());
+		client.getClientHelper().enableStreamEventListener(getChannel().getTwitchChannel());
+		client.getChat().joinChannel(getChannel().getTwitchChannel());
+
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(ChannelMessageEvent.class,
 				this::onChannelMessage);
 
-		getTwitchClient().getEventManager().getEventHandler(SimpleEventHandler.class).onEvent(FollowEvent.class,
-				this::onFollow);
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(FollowEvent.class, this::onFollow);
+
+
+		client.getChat().sendMessage("shrineoflostsecrets", "Welcome to the Shrine Of Lost Secrets");
+
 	}
 
 	/**
 	 * Subscribe to the ChannelMessage Event and write the output to the console
 	 */
 	public void onFollow(FollowEvent event) {
-//		logger.info("FOLLOW");
-//		registerUser(event);
+		logger.info("FOLLOW" + event.getUser().getId());
+		registerUser(event);
+		logger.info("FOLLOW Done");
+
 	}
 
 	public void onChannelMessage(ChannelMessageEvent event) {
-		logger.info("MESSAGE");
-
-		if(event.getMessage().toLowerCase().startsWith("!auth")) {
-			logger.info("AUTH");
-			registerUser(event);
-		}
+		logger.info("MESSAGE " + event.getUser().getId() + " " + event.getMessage());
+		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName());
 	}
 
-	private void registerUser(ChannelMessageEvent event) {
-//
-		logger.info("registerUser "+ event.getUser().getName() + " " + event.getUser().getId() );
+	private void registerUser(FollowEvent event) {
 		String otp = OTPGenerator.generateOTP();
 		ShrineUser su = new ShrineUser();
 		su.loadShrineUserName(event.getUser().getName());
@@ -71,80 +89,27 @@ public class ShrineResponder extends ServiceAbstract {
 		su.setOtpPass(otp);
 		su.save();
 
-//		getTwitchClient().getChat().sendMessage("shrineoflostsecrets",
-//				"Thank you " + event.getUser().getName() + " for the follow check your whispers for your password");
-		logger.info("trying whisper message");
+		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName());
+		client.getHelix().sendWhisper(getCredential().getAccessToken(), "1005643393", event.getUser().getId(), 
+				"Thank you " + event.getUser().getName() + " for the follow us. Log in using https://shrineoflostsecrets.com/a/" + otp).queue();
 
-		getTwitchClient().getChat().sendMessage("shrineoflostsecrets",
-		"Thank you " + event.getUser().getName() + " Log in using https://shrineoflostsecrets.com/a/" + otp);
-
-		
-		logger.info("finsihed whisper message");
-
-	//	getTwitchClient().getHelix().sendWhisper(eventSocket.getDefaultToken().getAccessToken(), "1005643393",
-	//			event.getUser().getId(), "Test Private Message");
-
-//		logger.info("finished");
-
-//		logger.info("hi");
-//
-//		
-//		logger.info("getCredentialManager" + (twitchStream.getTwitchClient().getChat().getCredentialManager() == null));
-//
-//		logger.info("getOAuth2CredentialByUserId" + (twitchStream.getTwitchClient().getChat().getCredentialManager().getOAuth2CredentialByUserId("twitch") == null));
-//		
-//		logger.info("size" + (twitchStream.getTwitchClient().getChat().getCredentialManager().getCredentials().size()));
-
-//		
-//		logger.info(".get()" + (twitchStream.getTwitchClient().getChat().getCredentialManager().getOAuth2CredentialByUserId("twitch").get() == null));
-//
-//		logger.info(".get()" + (twitchStream.getTwitchClient().getChat().getCredentialManager().getOAuth2CredentialByUserId("twitch").get().getAccessToken() == null));
-//
-//		
-//		logger.info("auth" + twitchStream.getTwitchClient().getChat().getCredentialManager().getOAuth2CredentialByUserId("twitch").get().getAccessToken());
-//
-		// twitchStream.getTwitchClient().getChat().sendMessage("shrineoflostsecrets",
-		// "Check your Whipsers, we sent you your credential");
-
-//		logger.info("auth" + twitchStream.getTwitchClient().getChat().getCredentialManager().getOAuth2CredentialByUserId("twitch").get().getAccessToken());
-
-//		HystrixCommand<OutboundFollowing> resultList = getTwitchClient().getHelix().getFollowedChannels(null,
-//				twitchUser.getId(), "1005643393", null, null);
-//
-//		OutboundFollowing outboundFollowing = resultList.execute();
-//
-//		// Check if the outboundFollowing contains follows data
-//		if (outboundFollowing != null && outboundFollowing.getFollows() != null) {
-//			// Iterate over the follows and print out the from and to names
-//			outboundFollowing.getFollows().forEach(follow -> {
-//				logger.info(follow.getBroadcasterName() + " is following");
-//
-//			});
-//		} else {
-//			System.out.println("No follow data available or error in fetching data");
-//		}
-
-//		twitchStream.getTwitchClient().getHelix().sendWhisper(null, "shrineoflostsecrets", twitchUser, "Test Private Message" + otp);
-
-//		twitchStream.getTwitchClient().getHelix().sendWhisper(twitchStream.getTwitchClient().getChat().getCredentialManager().getOAuth2CredentialByUserId("twitch").get().getAccessToken(), "shrineoflostsecrets", twitchUser, "Test Private Message" + otp);
 	}
 
-	public TwitchClient buildTwitchClient() {
-		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
-
-		credential = new OAuth2Credential("twitch", Launcher.AUTHTOKEN, Launcher.REFRESH, Launcher.CLIENT_ID,
+	public OAuth2Credential initCred() {
+		return new OAuth2Credential("twitch", Launcher.AUTHTOKEN, Launcher.REFRESH, Launcher.CLIENT_ID,
 				Launcher.CLIENT_SECRET, 10000, null);
+	}
 
-		TwitchClient twitchClient = clientBuilder.withEnableHelix(true).withChatAccount(credential).withEnableChat(true)
-				.withDefaultAuthToken(credential).withEnableEventSocket(true).build();
-		
-		eventSocket = twitchClient.getEventSocket();		
-		twitchClient.getHelix().sendWhisper(eventSocket.getDefaultToken().getAccessToken(), "1005643393", "1005643393", "Test Private Message");
-		// endregion
-
-		twitchClient.getClientHelper().enableStreamEventListener(getChannel().getTwitchChannel());
-		twitchClient.getClientHelper().enableFollowEventListener(getChannel().getTwitchChannel());
-		return twitchClient;
+	public TwitchClient getTwitchClient() {
+		TwitchClientBuilder clientBuilder = TwitchClientBuilder.builder();
+		return clientBuilder
+				.withEnableHelix(true)
+				.withChatAccount(getCredential())
+				.withEnableChat(true)
+				.withDefaultEventHandler(ReactorEventHandler.class)
+				.withDefaultAuthToken(getCredential())
+				.withEnableEventSocket(true)
+				.build();
 	}
 
 	public String getServiceName() {

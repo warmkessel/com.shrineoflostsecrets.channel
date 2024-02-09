@@ -2,9 +2,6 @@ package com.shrineoflostsecrets.channel.database.datastore;
 
 import java.util.List;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import com.google.cloud.datastore.Datastore;
 import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
@@ -18,7 +15,7 @@ import com.google.common.collect.Lists;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 
 public class ShrineChannelEventList {
-	private static final Logger logger = LoggerFactory.getLogger(ShrineChannelEventList.class);
+	//private static final Logger logger = LoggerFactory.getLogger(ShrineChannelEventList.class);
 
 	public static List<Entity> listChanelEvents(String channel, String userName, Boolean ban, Boolean unlimitedSize){
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();

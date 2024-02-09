@@ -29,8 +29,8 @@ List<Entity> listChanels = ShrineChannelService.listChannels();
 %>
 <tr>
 <td><a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>">Twitch <%if(live){%>LIVE!<%}%></a></td>
-<td><a href="<%if(live){%>channelEventDynamic.jsp<%}else{ %>channelEvent.jsp<%}%>?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
-<td><a href="channelVotes.jsp?channel=<%=channel.getTwitchChannel()%>">Score Board!</a></td>
+<td><a href="<%if(live){%><%=JSPConstants.CHANNELEVENTDYNAMIC%><%}else{ %><%=JSPConstants.CHANNELEVENT%><%}%>?channel=<%=channel.getTwitchChannel() %>"><%=channel.getTwitchChannel() %></a></td>
+<td><a href="<%=JSPConstants.CHANNELVOTE%>?channel=<%=channel.getTwitchChannel()%>">Score Board!</a></td>
 </tr>
 <%}%>
 </table>

@@ -7,7 +7,7 @@ UserService userService = UserServiceFactory.getUserService();
 User currentUser = userService.getCurrentUser();
 
  if (currentUser == null || !userService.isUserAdmin()) {
-	response.sendRedirect("/index.jsp");
+	response.sendRedirect(JSPConstants.INDEX);
 	return;
 } 
  
@@ -46,7 +46,7 @@ List<Entity> listChannels = ShrineUserService.listUsers(); // Retrieve list of S
 			userList.loadFromEntity(entity);
 		%>
 		<tr>
-			<td><a href="/admin/user.jsp?id=<%=userList.getId()%>"><%=userList.getId()%></a></td>
+			<td><a href="<%=JSPConstants.ADMINUSERL%>?id=<%=userList.getId()%>"><%=userList.getId()%></a></td>
 			<td>
 					<%=userList.getTwitchUserName()%>
 			</td>

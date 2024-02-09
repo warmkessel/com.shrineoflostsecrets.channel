@@ -15,7 +15,7 @@
 	gtag('config', 'G-N2VTBWYNCJ');
 </script>
 <body>
-	<table>
+
 		<%
 		String requestChannel = request.getParameter("channel");
 		String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
@@ -37,7 +37,7 @@
 			        }
 			    });
 			}
-			%>size <%=listVotes.size() %><%
+			%>Size: <%=listVotes.size() %>	<table><%
 			 // Convert the entry set of the map to a list
 		    List<Map.Entry<Long, Long>> sortedEntries = new ArrayList<>(scoreMap.entrySet());
 		    // Sort the list by values in descending order without using lambda expressions
@@ -56,7 +56,7 @@
 				channelEvent.loadEvent(entry.getKey());
 		%>
 		<tr>
-			<td><a href="/service/voteEvent.jsp?id=<%=channelEvent.getId() %>&channel=<%=channelEvent.getTwitchChannel() %>&userName=<%=channelEvent.getTwitchUser() %>&amount=100">Vote!</a></td><td>
+			<td><a href="<%=JSPConstants.SERVICEVOTE%>?id=<%=channelEvent.getId() %>&channel=<%=channelEvent.getTwitchChannel() %>&userName=<%=channelEvent.getTwitchUser() %>&amount=100">Vote!</a></td><td>
 			<td><%=entry.getValue()%></td>
 			<td><%=channelEvent.getTwitchUser()%></td>
 			<td><%=channelEvent.getMessage()%></td>

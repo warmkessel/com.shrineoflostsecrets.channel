@@ -5,7 +5,7 @@ UserService userService = UserServiceFactory.getUserService();
 User currentUser = userService.getCurrentUser();
 
 if (currentUser == null || !userService.isUserAdmin()) {
-    response.sendRedirect("/index.jsp");
+    response.sendRedirect(JSPConstants.INDEX);
     return;
 }
 
