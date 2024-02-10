@@ -4,25 +4,15 @@
 <%
 response.setHeader("Content-Type", "application/json");
 
+String sessionAuth = (String) request.getSession().getAttribute("auth");
+if(null == sessionAuth || sessionAuth.isBlank()){
+	sessionAuth = request.getSession().getId();
+}
+
 long id = Long.valueOf(request.getParameter("id"));
 boolean safe = Boolean.valueOf(request.getParameter("safe"));
 String channel = request.getParameter("channel");
-String userName = request.getParameter("userName");
 long amount = Long.valueOf(request.getParameter("amount"));
-ShrineVoteCategoryEnum shrineVoteCategory = ShrineVoteCategoryEnum.findById(request.getParameter("category"));
 
-ShrineVote vote = new ShrineVote();
-vote.setShrineChannelEventId(id);
-vote.setTwitchChannel(channel);
-vote.setTwitchUser(userName);
-vote.setShrineVoteCategory(shrineVoteCategory);
-vote.setAmount(amount);
-vote.setVoteDate();
-vote.setSafe(safe);
-vote.save();
-
-JSONObject jsonResponse = new JSONObject();
-jsonResponse.put("done", true);
-
-out.print(jsonResponse.toString());
-%>
+boolean theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
+%><%=theReturn%>

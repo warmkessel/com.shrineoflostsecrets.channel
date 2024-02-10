@@ -46,6 +46,7 @@ public enum ShrineVoteCategoryEnum {
             return ShrineVoteCategoryEnum.CATEGORY_ONE;
         }
     }
+   
     public static ShrineVoteCategoryEnum findById(int id) {
         for (ShrineVoteCategoryEnum category : ShrineVoteCategoryEnum.values()) {
             if (category.getId() == id) {

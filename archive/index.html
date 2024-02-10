@@ -1,28 +1,3 @@
-<%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
-<%@ page import="java.util.*"%>
-<%@ page import="javax.servlet.http.HttpSession,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.datastore.*,com.google.cloud.datastore.*"%>
-<%
-ShrineUser su = new ShrineUser();
-String uri = request.getRequestURI();
-// Assuming the code is always after the last slash
-String auth = uri.substring(uri.lastIndexOf("/a/") + 3);
-
-if (auth.length() > 0) {
-    // Store the auth value in the session
-    su.loadShrineOTP(auth);
-    if(su.isValue()){
-        session.setAttribute("auth", su.getKeyString());
-
-    } 
-} 
-// Check if there is a stored auth value in the session
-String sessionAuth = (String) request.getSession().getAttribute("auth");
-if (sessionAuth != null && !su.isValue()) {
-	// Use the auth from the session if there is no auth in the URL
-	su.loadShrineUser(sessionAuth);
-}
-%>
 <!DOCTYPE html>
 <!--[if lt IE 7]>      <html lang="en" class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
 <!--[if IE 7]>         <html lang="en" class="no-js lt-ie9 lt-ie8"> <![endif]-->
@@ -31,15 +6,6 @@ if (sessionAuth != null && !su.isValue()) {
 <html lang="en" class="no-js">
 <!--<![endif]-->
 <head>
-<!-- Google tag (gtag.js) -->
-<script async="true"
-    src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-N2VTBWYNCJ');
-</script>
 <!-- Mobile Specific Meta -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <!-- Always force latest IE rendering engine -->
@@ -52,6 +18,7 @@ if (sessionAuth != null && !su.isValue()) {
 
 <!-- Site Title -->
 <title>The Shrine of Lost Secrets</title>
+
 <!--
         Google Fonts
         ============================================= -->
@@ -80,7 +47,9 @@ if (sessionAuth != null && !su.isValue()) {
 
 <!-- Modernizer Script for old Browsers -->
 <script src="js/vendor/modernizr-2.6.2.min.js"></script>
+
 </head>
+
 <body>
 
 	<!--
@@ -88,6 +57,7 @@ if (sessionAuth != null && !su.isValue()) {
         ==================================== -->
 	<header id="navigation" class="navbar-fixed-top">
 		<div class="container">
+
 			<div class="navbar-header">
 				<!-- responsive nav button -->
 				<button type="button" class="navbar-toggle" data-toggle="collapse"
@@ -112,8 +82,8 @@ if (sessionAuth != null && !su.isValue()) {
 				role="navigation">
 				<ul id="nav" class="nav navbar-nav">
 					<li class="current"><a href="#home">Home</a></li>
-					<li><a href="#channel">Channels</a></li>
-					<li><a href="#voting">Voting</a></li>
+					<li><a href="#channels">Channels</a></li>
+					<li><a href="#voting">Voteing</a></li>
 					<li><a href="#contact">Contact</a></li>
 				</ul>
 			</nav>
@@ -143,22 +113,22 @@ if (sessionAuth != null && !su.isValue()) {
 					style="background-image: url('img/slider/bg2.jpg')">
 					<div class="carousel-caption">
 						<div class="animated bounceInRight">
-							<h1>
-								Welcome <%= su.getTwitchUserName()%>! <br>The Shrine of Lost Secrets
-							</h1>
-							<p>The Shrine contains lost secrets, Discover what
-								we hold in our cave of wonders.  Come in and see!</p>
+							<h2>
+								Welcome! <br>The Shrine of Lost Secrets
+							</h2>
+							<p>The Shrine contains lost secrets, come and discover what
+								we hold in our cave of wonders</p>
 						</div>
 					</div>
 				</div>
 
 				<div class="item"
-					style="background-image: url('https://static-cdn.jtvnw.net/jtv_user_pictures/6061ee4d-dae2-4fc8-8910-fdff7a02094f-profile_banner-480.jpeg')">
+					style="background-image: url('https://pbs.twimg.com/media/GCAtIqHbcAAGrQs?format=jpg&name=large')">
 					<div class="carousel-caption">
 						<div class="animated bounceInDown">
 							<h2>Sadgirl</h2>
 							<p>
-								<b>Why are u a sad girl?</b> No dad								
+								<b>Why are u a sad girl?</b>No dad								
 							</p>
 						</div>
 					</div>
@@ -170,7 +140,7 @@ if (sessionAuth != null && !su.isValue()) {
 						<div class="animated bounceInUp">
 							<h2>Lazeruss</h2>
 							<p>
-								<b>Arrive exactly when I intend to and leave when I'm ready.</b>
+								<b> arrive exactly when I intend to and leave when I'm ready.</b>
 							</p>
 						</div>
 					</div>
@@ -196,7 +166,7 @@ if (sessionAuth != null && !su.isValue()) {
 	<!--
         #service
         ========================== -->
-	<section id="channel">
+	<section id="channels">
 		<div class="container">
 			<div class="row">
 				<div class="col-md-12">
@@ -208,30 +178,40 @@ if (sessionAuth != null && !su.isValue()) {
 			</div>
 			<div class="row">
 
-<%
-List<Entity> listChanels = ShrineChannelService.listChannels();
-    	for(Entity entity: listChanels) {
-    		ShrineChannel channel = new ShrineChannel();
-    		channel.loadFromEntity(entity);
-    		if(!Constants.SHRINEOFLOSTSECRETS.equals(channel.getTwitchChannel())){
-    		boolean live = (channel.getTwitchLastStart().getSeconds() - channel.getTwitchLastEnd().getSeconds() > 0);
-%>
 				<div class="col-md-6 col-sm-12 wow fadeInLeft">
 					<div class="media">
-						<a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>" class="pull-left" target="_blank"><img
+						<a href="https://www.twitch.tv/sadgirl" class="pull-left" target="_blank"><img
 							class="InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar"
-							alt="<%=channel.getTwitchChannel() %>" alt="Cog"
-							src="<%=channel.getTwitchLogoImg()%>">
+							alt="sadgirl"
+							src="https://static-cdn.jtvnw.net/jtv_user_pictures/1f2ee5da-0329-4a49-8bf1-d3af88b83655-profile_image-70x70.png">
 						</a>
 						<div class="media-body">
 							<h3>Top Comment</h3>
-							<p><%=channel.getTwitchBestQuote()%></p>
+							<p>Curabitur arcu erat, accumsan id imperdiet et, porttitor
+								at sem. Mauris blandit aliquet elit, eget tincidunt nibh
+								pulvinar a. Curabitur aliquet quam.</p>
 						</div>
-						<a href="<%if(live){%><%=JSPConstants.CHANNELEVENTDYNAMIC%><%}else{ %><%=JSPConstants.CHANNELEVENT%><%}%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a> - <a href="<%=JSPConstants.CHANNELVOTE%>?channel=<%=channel.getTwitchChannel()%>">Score Board!</a>
 					</div>
-				</div>
-<%}}%>
 
+				</div>
+
+				<div class="col-md-6 col-sm-12 wow fadeInRight"
+					data-wow-delay="0.2s">
+					<div class="media">
+						<a href="https://www.twitch.tv/lazeruss" class="pull-left" target="_blank"><img
+							class="InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar"
+							alt="Lazeruss"
+							src="https://static-cdn.jtvnw.net/jtv_user_pictures/88d7ee66-98f5-4585-887a-f3f67697a450-profile_image-70x70.png">
+						</a>
+						<div class="media-body">
+							<h3>Top Comment</h3>
+							<p>Curabitur arcu erat, accumsan id imperdiet et, porttitor
+								at sem. Mauris blandit aliquet elit, eget tincidunt nibh
+								pulvinar a. Curabitur aliquet quam.</p>
+						</div>
+					</div>
+
+				</div>
 			</div>
 			<!-- end .row -->
 		</div>
@@ -421,7 +401,7 @@ List<Entity> listChanels = ShrineChannelService.listChannels();
 
 				<div class="section-title text-center wow fadeInDown">
 					<h2>Contact Us</h2>
-					<p>We would love to talk with you. Find us on <a href="https://www.twitch.tv/shrineoflostsecrets">>Twitch</a></p>
+					<p>We would love to talk with you. Find us on Twitch</p>
 				</div>
 			</div>
 		</div>

@@ -5,6 +5,7 @@ public class Constants {
 	public static final String KEY = "Key";
 	public static final String VERSION = "v.0.1";
 
+	public static final String SHRINEOFLOSTSECRETSID = "";
 	
 	
 

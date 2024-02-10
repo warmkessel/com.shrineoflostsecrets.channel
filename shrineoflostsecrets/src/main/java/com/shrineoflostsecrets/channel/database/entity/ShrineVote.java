@@ -8,11 +8,15 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import com.google.cloud.Timestamp;
+import com.google.cloud.datastore.Datastore;
+import com.google.cloud.datastore.DatastoreOptions;
 import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
+import com.google.cloud.datastore.Transaction;
 import com.shrineoflostsecrets.channel.constants.Constants;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelService;
+import com.shrineoflostsecrets.channel.database.datastore.ShrineVoteService;
 import com.shrineoflostsecrets.channel.enumerations.ShrineVoteCategoryEnum;
 
 public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
@@ -142,20 +146,29 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 	}
 
 	public void save() {
-		Entity.Builder entity = Entity.newBuilder(getKey());
-		entity.set(TwitchChannelConstants.DELETED, getDeleted())
-				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate())
-				.set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
-				.set(TwitchChannelConstants.TWITCHCHANNEL, getTwitchChannel())
-				.set(TwitchChannelConstants.TWITCHUSERNAME, getTwitchUser())
-				.set(TwitchChannelConstants.SHRINEVOTEAMOUNT, getAmount())
-				.set(TwitchChannelConstants.SHRINEVOTEDATE, getVoteDate())
-				.set(TwitchChannelConstants.SHRINEVOTECATEGORY, getShrineVoteCategoryId())
-				.set(TwitchChannelConstants.SHRINECHANNELEVENTID, getShrineChannelEventId())
-				.set(TwitchChannelConstants.SAFE, isSafe());
-		getDatastore().put(entity.build());
+		save(null);
 	}
+	public void save(Transaction txn) {
+	    Entity.Builder entityBuilder = Entity.newBuilder(getKey())
+	            .set(TwitchChannelConstants.DELETED, getDeleted())
+	            .set(TwitchChannelConstants.CREATEDDATE, getCreatedDate())
+	            .set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
+	            .set(TwitchChannelConstants.TWITCHCHANNEL, getTwitchChannel())
+	            .set(TwitchChannelConstants.TWITCHUSERNAME, getTwitchUser())
+	            .set(TwitchChannelConstants.SHRINEVOTEAMOUNT, getAmount())
+	            .set(TwitchChannelConstants.SHRINEVOTEDATE, getVoteDate())
+	            .set(TwitchChannelConstants.SHRINEVOTECATEGORY, getShrineVoteCategoryId())
+	            .set(TwitchChannelConstants.SHRINECHANNELEVENTID, getShrineChannelEventId())
+	            .set(TwitchChannelConstants.SAFE, isSafe());
 
+	    if (txn != null) {
+	        // If a transaction is provided, use it to save the entity
+	        txn.put(entityBuilder.build());
+	    } else {
+	        // If no transaction is provided, save the entity to the Datastore directly
+	        getDatastore().put(entityBuilder.build());
+	    }
+	}
 	public void loadShrineVote(Key key) {
 		// log.info("key " + key.toString());
 		Entity twitchStream = getDatastore().get(key);
@@ -232,5 +245,44 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 		this.shrineChannelEventId = shrineChannelEventId;
 	}
 
-	
+	public static boolean addVote(String twitchChannel, long shrineChannelEventId, ShrineVoteCategoryEnum shrineVoteCategoryId, long amount, String twitchUser) {
+		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+		Transaction txn = datastore.newTransaction();
+        try {
+            // Assume a method exists to find a ShrineVote by shrineChannelEventId
+            
+        	ShrineVote existingVote = new ShrineVote();
+        
+        	Entity ent = ShrineVoteService.findShrineVoteByEventId(shrineChannelEventId, txn);
+       
+            if (ent != null) {
+                // If the vote exists, update the amount
+            	existingVote.loadFromEntity(ent);
+                existingVote.setAmount(existingVote.getAmount() + amount);
+                existingVote.setUpdatedDate();
+            } else {
+                // If the vote doesn't exist, create a new one
+                existingVote = new ShrineVote();
+                existingVote.setTwitchChannel(twitchChannel);
+                existingVote.setShrineChannelEventId(shrineChannelEventId);
+                existingVote.setShrineVoteCategoryId(shrineVoteCategoryId.getId());
+                existingVote.setAmount(amount);
+                existingVote.setTwitchUser(twitchUser);
+                // Set other properties as needed
+            }
+
+            // Save the vote
+            existingVote.save(txn); // Assume save method accepts a transaction parameter for atomic operations
+
+            // Commit the transaction
+            txn.commit();
+            return true;
+        } catch (Exception e) {
+            logger.error("Error adding vote", e);
+            if (txn.isActive()) {
+                txn.rollback();
+            }
+            return false;
+        }
+    }
 }

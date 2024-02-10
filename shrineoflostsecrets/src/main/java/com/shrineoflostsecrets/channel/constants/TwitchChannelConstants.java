@@ -15,6 +15,9 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String SHRINELASTLOGGED = "ShrineLastLongedIn";
 	public static final String TWITCHLASTSTART = "TwitchLastStart";
 	public static final String TWITCHLASTEND = "TwitchLastEnd";
+	public static final String TWITCHBESTQUOTE = "TwitchBestQuote";
+	public static final String TWITCHLOGOIMG = "TwitchLogoIMG";
+
 	
 	public static final String OTPPASS = "Otppass";
 	

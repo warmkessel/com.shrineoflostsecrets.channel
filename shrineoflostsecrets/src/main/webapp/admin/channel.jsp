@@ -18,6 +18,8 @@ String twitchChannelName = request.getParameter("twitchChannel");
 String discordChannelName = request.getParameter("discordChannel");
 String twitchUserName = request.getParameter("twitchUserName");
 String discordUserName = request.getParameter("discordUserName");
+String twitchLogoImg = request.getParameter("twitchLogoImg"); // Retrieve Twitch Logo Image
+String twitchBestQuote = request.getParameter("twitchBestQuote"); // Retrieve Twitch Best Quote
 String twitchServiceTypeStr = request.getParameter("twitchServiceType");
 String twitchLastStartStr = request.getParameter("twitchLastStart");
 String twitchLastEndStr = request.getParameter("twitchLastEnd");
@@ -48,6 +50,8 @@ if (twitchChannelName != null && discordChannelName != null) {
     channel.setDiscordChannel(discordChannelName);
     channel.setTwitchUserName(twitchUserName);
     channel.setDiscordUserName(discordUserName);
+    channel.setTwitchLogoImg(twitchLogoImg); // Set Twitch Logo Image
+    channel.setTwitchBestQuote(twitchBestQuote); // Set Twitch Best Quote
     channel.setTwitchServiceType(twitchServiceType);
     channel.setTwitchLastStart(twitchLastStartStr);
     channel.setTwitchLastEnd(twitchLastEndStr);
@@ -76,6 +80,9 @@ List<Entity> listChannels = ShrineChannelService.listChannels(); // Retrieve lis
                 href="<%=JSPConstants.CHANNELEVENT%>?channel=<%=channelList.getTwitchChannel()%>">
                     <%=channelList.getTwitchChannel()%>
             </a></td>
+            <td><%=channelList.getTwitchUserName()%></td>
+            <td><img src="<%=channelList.getTwitchLogoImg()%>" alt="Twitch Logo" width="100" height="100"></td>
+            <td><%=channelList.getTwitchBestQuote()%></td>
         </tr>
         <%
         }
@@ -100,6 +107,10 @@ List<Entity> listChannels = ShrineChannelService.listChannels(); // Retrieve lis
             value=<%=channel.getTwitchUserName()%>><br> Discord
         Username: <input type="text" name="discordUserName"
             value=<%=channel.getDiscordUserName()%>><br> Twitch
+        Logo Image: <input type="text" name="twitchLogoImg"
+            value=<%=channel.getTwitchLogoImg()%>><br> Twitch
+        Best Quote: <input type="text" name="twitchBestQuote"
+            value=<%=channel.getTwitchBestQuote()%>><br> Twitch
         Service Type: <input type="text" name="twitchServiceType" value="<%=channel.getTwitchServiceType()%>"><br>
         Twitch Last Start: <input type="datetime-local" name="twitchLastStart"
             value="<%=channel.getTwitchLastStartString()%>"><br>

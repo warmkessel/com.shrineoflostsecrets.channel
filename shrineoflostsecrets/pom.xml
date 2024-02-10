@@ -6,6 +6,10 @@
 	<version>1.0-SNAPSHOT</version>
 	<groupId>com.shrineoflostsecrets</groupId>
 	<artifactId>ShrineOfLostSecrets</artifactId>
+	<properties>
+		<maven.compiler.source>11</maven.compiler.source>
+		<maven.compiler.target>11</maven.compiler.target>
+	</properties>
 	<dependencies>
 		<dependency>
 			<groupId>net.dv8tion</groupId>
@@ -63,8 +67,8 @@
 				<artifactId>appengine-maven-plugin</artifactId>
 				<version>2.8.0</version>
 				<configuration>
-						<deploy.projectId>shrineoflostsecrets</deploy.projectId>
-						<deploy.version>1-1-1</deploy.version>
+					<deploy.projectId>shrineoflostsecrets</deploy.projectId>
+					<deploy.version>1-1-1</deploy.version>
 					<jvmFlags>
 						<jvmFlag>-Xdebug</jvmFlag>
 						<jvmFlag>

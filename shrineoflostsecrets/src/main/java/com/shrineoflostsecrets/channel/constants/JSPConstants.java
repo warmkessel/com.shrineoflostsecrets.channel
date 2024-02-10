@@ -5,7 +5,7 @@ public class JSPConstants {
 	public static final String CHANNEL = "/channel.jsp";
 	public static final String CHANNELEVENT = "/channelEvent.jsp";
 	public static final String CHANNELEVENTDYNAMIC = "/channelEventDynamic.jsp";
-	public static final String CHANNELVOTE = "/channelVote.jsp";
+	public static final String CHANNELVOTE = "/channelVotes.jsp";
 
 	public static final String SERVICEVOTE = "/service/voteEvent.jsp?";
 	public static final String SERVICECHANNELEVENT = "/service/channelEventJson.jsp";
