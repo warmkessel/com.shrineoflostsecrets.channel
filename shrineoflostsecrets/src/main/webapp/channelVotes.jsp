@@ -2,6 +2,14 @@
 	pageEncoding="UTF-8"%>
 <%@ page
 	import="java.util.*, java.util.function.*,com.google.cloud.datastore.*, com.shrineoflostsecrets.channel.database.datastore.*, com.shrineoflostsecrets.channel.constants.*, com.shrineoflostsecrets.channel.database.entity.*, com.shrineoflostsecrets.channel.util.*"%>
+<%
+ShrineUser su = new ShrineUser();
+String sessionAuth = (String) request.getSession().getAttribute("auth");
+if (sessionAuth != null && !su.isValue()) {
+	// Use the auth from the session if there is no auth in the URL
+	su.loadShrineUser(sessionAuth);
+}
+%>
 <html>
 <!-- Google tag (gtag.js) -->
 <script async="true"

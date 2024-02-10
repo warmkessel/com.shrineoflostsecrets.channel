@@ -17,7 +17,6 @@
   gtag('config', 'G-N2VTBWYNCJ');
 </script>
 <body>
-ni
 <table>
 
 <%

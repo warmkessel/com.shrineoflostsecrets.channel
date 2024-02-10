@@ -1,5 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
-<%@ page import="com.shrineoflostsecrets.channel.constants.*"%>
+<%@ page import="com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*"%>
 <%
 boolean unlimited = Boolean.valueOf(request.getParameter("unlimited"));
 boolean ban = Boolean.valueOf(request.getParameter("ban"));
@@ -7,6 +7,16 @@ String id = request.getParameter("id");
 String requestChannel = request.getParameter("channel");
 String userName = request.getParameter("userName");
 String channel = (requestChannel != null && !requestChannel.isEmpty()) ? requestChannel : "shrineoflostsecrets";
+
+
+// Check if there is a stored auth value in the session
+String sessionAuth = (String) request.getSession().getAttribute("auth");
+ShrineUser su = new ShrineUser();
+if (sessionAuth != null && !su.isValue()) {
+	// Use the auth from the session if there is no auth in the URL
+	su.loadShrineUser(sessionAuth);
+}
+
 %>
 <%=channel%>
 <html>
@@ -64,7 +74,10 @@ String channel = (requestChannel != null && !requestChannel.isEmpty()) ? request
                         // No default case needed since eventType is initialized with the event's type
                     }
                     
-                    eventElement.innerHTML = eventType + ' Event: ' + event.createdDate + ' <a href="./channelEventDynamic.jsp?channel=<%=channel%>&userName=' + event.twitchUser +'">' + event.twitchUser + '</a> <a href="/service/voteEvent.jsp?id='+event.id+'&channel=<%=channel%>&userName=<%=userName %>&amount=100">Vote!</a> : ' + event.message;
+                    eventElement.innerHTML = eventType + ' Event: ' + event.createdDate + 
+                    ' <a href="./channelEventDynamic.jsp?channel=<%=channel%>&userName=' + event.twitchUser + '">' + 
+                    event.twitchUser + '</a> <button onclick="vote(\'' + event.id + '\', \'<%=channel%>\', \'100\')">Vote!</button> : ' + 
+                    event.message;
                     if(event.eventType === "<%=TwitchChannelConstants.ONUSERBAN%>" || event.eventType === "<%=TwitchChannelConstants.ONDELETEMESSAGE%>") {
                         eventElement.style.color = "red";
                     }
@@ -80,11 +93,33 @@ String channel = (requestChannel != null && !requestChannel.isEmpty()) ? request
             fetchAndDisplayEvents(); // Initial fetch
             setInterval(fetchAndDisplayEvents, 10000); // Repeat every 10 seconds
         }
+     // Function to perform a vote
+        async function vote(eventId, channel, amount) {
+        <% if(su.isValue()){%>
+    	 const url = ('/service/voteEvent.jsp?id='+ eventId + '&channel=' + channel + '&amount=' + amount);
+            try {
+                const response = await fetch(url, {
+                    method: 'GET', // or 'POST' if your server requires
+                });
+                const data = await response.text(); // Assuming the response is text
+                console.info("Vote Recorded " + data);
+/*                 alert(data); // Show the response in an alert box
+ */            } catch (error) {
+                console.error('Error during fetch:', error);
+            }
+            <%}else{%>
+            alert("We would love to record your vote, but you must login first");
+            <%}%>
+        }
+     
     </script>
 </head>
 <body onload="startEventUpdates()">
-		<a href="<%=JSPConstants.CHANNELEVENTDYNAMIC%>?channel=<%=channel%>&ban=<%=!ban%>">Toggle Ban</a>
-		<a href="<%=JSPConstants.CHANNELEVENT%>?channel=<%=channel%>&ban=<%=ban%>">Static</a>
+	<a
+		href="<%=JSPConstants.CHANNELEVENTDYNAMIC%>?channel=<%=channel%>&ban=<%=!ban%>">Toggle
+		Ban</a>
+	<a
+		href="<%=JSPConstants.CHANNELEVENT%>?channel=<%=channel%>&ban=<%=ban%>">Static</a>
 	<div id="status">Waiting for events...</div>
 	<!-- Status div to be updated on new events -->
 

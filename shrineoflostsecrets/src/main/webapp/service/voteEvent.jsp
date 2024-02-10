@@ -4,15 +4,13 @@
 <%
 response.setHeader("Content-Type", "application/json");
 
+boolean theReturn = false;
 String sessionAuth = (String) request.getSession().getAttribute("auth");
-if(null == sessionAuth || sessionAuth.isBlank()){
-	sessionAuth = request.getSession().getId();
+if(sessionAuth != null && !sessionAuth.isBlank()){
+	long id = Long.valueOf(request.getParameter("id"));
+	boolean safe = Boolean.valueOf(request.getParameter("safe"));
+	String channel = request.getParameter("channel");
+	long amount = Long.valueOf(request.getParameter("amount"));
+	theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
 }
-
-long id = Long.valueOf(request.getParameter("id"));
-boolean safe = Boolean.valueOf(request.getParameter("safe"));
-String channel = request.getParameter("channel");
-long amount = Long.valueOf(request.getParameter("amount"));
-
-boolean theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
 %><%=theReturn%>
