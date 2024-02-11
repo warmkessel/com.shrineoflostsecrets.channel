@@ -5,6 +5,7 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String SHRINEUSER = "ShrineUser";
 	public static final String SHRINECHANNEL = "ShrineChannel";
 	public static final String SHRINEVOTE = "ShrineVote";
+	public static final String SHRINLOG= "ShrineLog";
 
 	public static final String TWITCHUSERID = "TwitchUserId";
 	public static final String TWITCHUSERDDISPLAYNAME = "TwitchUserDisplayName";
@@ -32,6 +33,7 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String SHRINENOMINATIONDATE = "ShrineNominationDate";
 	public static final String SHRINECHANNELEVENTID = "shrineChannelEventId";
 	public static final String SAFE = "Safe";
+	public static final String DEBUG = "Debug";
 
 	
 
@@ -39,8 +41,10 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String TWITCHEVENTID = "EventId";
 	public static final String TWITCHREDEEMTIME = "RedeemTime";
 	public static final String TWITCHREWARDED = "Rewared";
-	public static final String TWITCHMESSAGE = "Message";
+	public static final String MESSAGE = "Message";
 	public static final String TWITCHELEVATEDCHATPAYMENT = "ElevatedChatPayment";
+	public static final String EVENTTYPE = "EventType";
+	
 
 	
 	public static final String ONCHANNELLEAVEEVENT = "onChannelLeaveEvent";

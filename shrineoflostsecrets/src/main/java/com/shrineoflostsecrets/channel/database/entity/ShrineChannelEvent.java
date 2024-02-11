@@ -132,7 +132,7 @@ public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineC
 				.set(TwitchChannelConstants.TWITCHEVENTID, getEventId())
 				.set(TwitchChannelConstants.TWITCHREDEEMTIME, getRedeemTime())
 				.set(TwitchChannelConstants.TWITCHREWARDED, getRewared())
-				.set(TwitchChannelConstants.TWITCHMESSAGE, getMessage())
+				.set(TwitchChannelConstants.MESSAGE, getMessage())
 				.set(TwitchChannelConstants.TWITCHELEVATEDCHATPAYMENT, getElevatedChatPayment())
 				.set(TwitchChannelConstants.TWITCHCHANNEL, getTwitchChannel())
 				.set(TwitchChannelConstants.TWITCHUSERNAME, getTwitchUser())
@@ -162,7 +162,7 @@ public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineC
 			setEventId(entity.getString(TwitchChannelConstants.TWITCHEVENTID));
 			setRedeemTime(entity.getString(TwitchChannelConstants.TWITCHREDEEMTIME));
 			setRewared(entity.getString(TwitchChannelConstants.TWITCHREWARDED));
-			setMessage(entity.getString(TwitchChannelConstants.TWITCHMESSAGE));
+			setMessage(entity.getString(TwitchChannelConstants.MESSAGE));
 			setElevatedChatPayment(entity.getString(TwitchChannelConstants.TWITCHELEVATEDCHATPAYMENT));
 			setTwitchChannel(entity.getString(TwitchChannelConstants.TWITCHCHANNEL));
 			setTwitchUser(entity.getString(TwitchChannelConstants.TWITCHUSERNAME));
@@ -175,7 +175,7 @@ public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineC
 				+ ", " + TwitchChannelConstants.TWITCHEVENTID + "\"='" + eventId + '\''
 				+ ", " + TwitchChannelConstants.TWITCHREDEEMTIME + "\"='" + redeemTime + '\''
 				+ ", " + TwitchChannelConstants.TWITCHREWARDED + "\"='" + rewared + '\''
-				+ ", " + TwitchChannelConstants.TWITCHMESSAGE + "\"='" + message + '\''
+				+ ", " + TwitchChannelConstants.MESSAGE + "\"='" + message + '\''
 				+ ", " + TwitchChannelConstants.TWITCHELEVATEDCHATPAYMENT + "\"='" + elevatedChatPayment + '\''
 				+ ", " + TwitchChannelConstants.TWITCHCHANNEL + "\"='" + twitchChannel + '\''
 				+ ", " + TwitchChannelConstants.TWITCHUSERNAME + "\"='" + twitchUser + '\''

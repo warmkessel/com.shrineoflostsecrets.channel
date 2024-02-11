@@ -5,9 +5,9 @@ import org.slf4j.LoggerFactory;
 
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
-import com.shrineoflostsecrets.channel.collector.Launcher;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannelEvent;
+import com.shrineoflostsecrets.channel.util.DebugMode;
 
 public abstract class ServiceAbstract {
 	private static final Logger logger = LoggerFactory.getLogger(ServiceAbstract.class);
@@ -66,8 +66,8 @@ public abstract class ServiceAbstract {
 		ts.setRewared(rewared);
 		ts.setRedeemTime(redeemTime);
 		ts.setMessage(message);
-		if (!Launcher.DEBUG.equalsIgnoreCase("true")) {
-			ts.save();
+		if(DebugMode.isDebug()) {
+		ts.save();
 		}
 	}
 }

@@ -16,13 +16,13 @@ import com.shrineoflostsecrets.channel.collector.twitch.ShrineCapture;
 import com.shrineoflostsecrets.channel.collector.twitch.ShrineResponder;
 import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelService;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
+import com.shrineoflostsecrets.channel.util.DebugMode;
 
 public class Launcher {
 
 	private static final Logger logger = LoggerFactory.getLogger(Launcher.class);
 
 	// Environment Variables
-	public static final String DEBUG = System.getenv("DEBUG");
 	public static final String AUTHTOKEN = System.getenv("AUTHTOKEN");
 	public static final String REFRESH = System.getenv("REFRESH");
 	public static final String CLIENT_ID = System.getenv("CLIENT_ID");
@@ -37,7 +37,7 @@ public class Launcher {
 		logger.info("Client Secret: [PROTECTED]");
 		logger.info("Authenticanion Token: {}", AUTHTOKEN);
 		logger.info("Refresh Token: {}", REFRESH);
-		logger.info("Debug: {}", DEBUG);
+		logger.info("Debug: {}", DebugMode.getSystemDebug());
 
 		ShrineChannel channel = null;
 

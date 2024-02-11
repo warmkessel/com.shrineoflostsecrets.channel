@@ -12,5 +12,7 @@ if(sessionAuth != null && !sessionAuth.isBlank()){
 	String channel = request.getParameter("channel");
 	long amount = Long.valueOf(request.getParameter("amount"));
 	theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
+
+	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebug.PROUCTION, "User " + sessionAuth + " Channel " + channel + " id " + id + " safe " + safe+ " amount " + amount);
 }
 %><%=theReturn%>

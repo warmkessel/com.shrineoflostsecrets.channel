@@ -1,7 +1,7 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
-<%@ page import="javax.servlet.http.HttpSession,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.datastore.*,com.google.cloud.datastore.*"%>
+<%@ page import="javax.servlet.http.HttpSession,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.enumerations.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.datastore.*,com.google.cloud.datastore.*"%>
 <%
 ShrineUser su = new ShrineUser();
 // Check if there is a stored auth value in the session
@@ -9,6 +9,8 @@ String sessionAuth = (String) request.getSession().getAttribute("auth");
 if (sessionAuth != null && !su.isValue()) {
 	// Use the auth from the session if there is no auth in the URL
 	su.loadShrineUser(sessionAuth);
+	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebug.PROUCTION, "User " + sessionAuth + " at the Index Page");
+
 }
 %>
 <!DOCTYPE html>

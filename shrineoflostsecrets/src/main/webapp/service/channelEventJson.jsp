@@ -1,7 +1,11 @@
 <%@ page language="java" contentType="application/json; charset=UTF-8"
-    pageEncoding="UTF-8"%><%@ page import="java.util.*,com.shrineoflostsecrets.channel.util.*,org.json.JSONArray,org.json.JSONObject,com.google.cloud.datastore.*,com.shrineoflostsecrets.channel.database.datastore.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*"%><%
-response.setHeader("Content-Type", "application/json");
+    pageEncoding="UTF-8"%><%@ page import="java.util.*,com.shrineoflostsecrets.channel.util.*,org.json.JSONArray,org.json.JSONObject,com.shrineoflostsecrets.channel.enumerations.*,com.google.cloud.datastore.*,com.shrineoflostsecrets.channel.database.datastore.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*"%><%
+	response.setHeader("Content-Type", "application/json");
 
+    String sessionAuth = (String) request.getSession().getAttribute("auth");
+	ShrineLog.log(TwitchChannelConstants.SHRINECHANNELEVENT, ShrineDebug.PROUCTION, "User " + sessionAuth + " at the channelEventJson Page");
+
+    
     boolean unlimited = Boolean.valueOf(request.getParameter("unlimited"));
     boolean ban = Boolean.valueOf(request.getParameter("ban"));
     String id = request.getParameter("id");
