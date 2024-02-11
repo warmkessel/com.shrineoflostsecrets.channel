@@ -7,6 +7,7 @@ import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.twitch4j.TwitchClient;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannelEvent;
+import com.shrineoflostsecrets.channel.enumerations.ShrineDebug;
 import com.shrineoflostsecrets.channel.util.DebugMode;
 
 public abstract class ServiceAbstract {
@@ -66,8 +67,8 @@ public abstract class ServiceAbstract {
 		ts.setRewared(rewared);
 		ts.setRedeemTime(redeemTime);
 		ts.setMessage(message);
-		if(DebugMode.isDebug()) {
-		ts.save();
+		if(DebugMode.isDebug(ShrineDebug.PROUCTION)) {
+			ts.save();
 		}
 	}
 }
