@@ -104,7 +104,8 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 
 	public void save() {
 		Entity.Builder entity = Entity.newBuilder(getKey());
-		entity.set(TwitchChannelConstants.DELETED, getDeleted())
+        setUpdatedDate();
+        entity.set(TwitchChannelConstants.DELETED, getDeleted())
 				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate())
 				.set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
 				.set(TwitchChannelConstants.TWITCHUSERID, getTwitchUserId())

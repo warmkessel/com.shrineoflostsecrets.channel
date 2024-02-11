@@ -149,7 +149,8 @@ public class ShrineVote extends BaseEntity implements Comparable<ShrineVote> {
 		save(null);
 	}
 	public void save(Transaction txn) {
-	    Entity.Builder entityBuilder = Entity.newBuilder(getKey())
+        setUpdatedDate();
+		Entity.Builder entityBuilder = Entity.newBuilder(getKey())
 	            .set(TwitchChannelConstants.DELETED, getDeleted())
 	            .set(TwitchChannelConstants.CREATEDDATE, getCreatedDate())
 	            .set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())

@@ -126,7 +126,8 @@ public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineC
 
 	public void save() {
 		Entity.Builder entity = Entity.newBuilder(getKey());
-		entity.set(TwitchChannelConstants.DELETED, getDeleted())
+        setUpdatedDate();
+        entity.set(TwitchChannelConstants.DELETED, getDeleted())
 				.set(TwitchChannelConstants.CREATEDDATE, getCreatedDate()).set(TwitchChannelConstants.UPDATEDDATE, getUpdatedDate())
 				.set(TwitchChannelConstants.TWITCHEVENTTYPE, getEventType())
 				.set(TwitchChannelConstants.TWITCHEVENTID, getEventId())
