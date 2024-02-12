@@ -58,6 +58,6 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 	public static final String ONUSERBAN = "onUseBan";
 	public static final String ONUSERFOLLOW = "onUserFollow";
 	
-	public static final String[] BOTS = {"moobot", "nightbot","streamelements"};
+	public static final String[] BOTS = {"moobot", "nightbot","streamelements", "sadgirlb0t"};
 
 }	

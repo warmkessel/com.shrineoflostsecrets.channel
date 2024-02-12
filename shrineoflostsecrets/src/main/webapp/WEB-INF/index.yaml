@@ -21,3 +21,14 @@ indexes:
       - name: TwitchUserName
       - name: CreatedDate
         direction: desc
+  - kind: ShrineVote
+    properties:
+      - name: TwitchChannel
+      - name: Safe
+      - name: ShrineVoteAmount
+        direction: desc
+  - kind: ShrineVote
+    properties:
+      - name: TwitchChannel
+      - name: ShrineVoteAmount
+        direction: desc

@@ -2,7 +2,7 @@ package com.shrineoflostsecrets.channel.database.entity;
 
 import com.google.cloud.datastore.Entity;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
-import com.shrineoflostsecrets.channel.enumerations.ShrineDebug;
+import com.shrineoflostsecrets.channel.enumerations.ShrineDebugEnum;
 import com.shrineoflostsecrets.channel.util.DebugMode;
 
 public class ShrineLog extends BaseEntity {
@@ -24,7 +24,7 @@ public class ShrineLog extends BaseEntity {
 		this.debug = debug;
 	}
 
-	public void setDebug(ShrineDebug shrineDebug) {
+	public void setDebug(ShrineDebugEnum shrineDebug) {
 		setDebug(shrineDebug.getState());
 	}
 
@@ -91,7 +91,7 @@ public class ShrineLog extends BaseEntity {
 				+ '\'' + ", eventType='" + eventType + '\'' + '}';
 	}
 
-	public static void log(String eventType, ShrineDebug shrineDebug, String message) { // Include eventType parameter
+	public static void log(String eventType, ShrineDebugEnum shrineDebug, String message) { // Include eventType parameter
 		if (DebugMode.isDebug(shrineDebug)) {
 			ShrineLog log = new ShrineLog();
 			log.setDebug(shrineDebug);

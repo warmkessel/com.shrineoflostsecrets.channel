@@ -15,7 +15,7 @@ String channel = request.getParameter("channel");
 if(channel == null || channel.isBlank()){
 	channel="lazeruss";
 }
-List<Entity> listVotes = ShrineVoteService.listVotes(channel); // Retrieve list of Votes
+List<Entity> listVotes = ShrineVoteService.listVotes(channel, true); // Retrieve list of Votes
 %>
 
 <!DOCTYPE html>

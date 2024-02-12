@@ -1,6 +1,6 @@
 package com.shrineoflostsecrets.channel.util;
 
-import com.shrineoflostsecrets.channel.enumerations.ShrineDebug;
+import com.shrineoflostsecrets.channel.enumerations.ShrineDebugEnum;
 
 public class DebugMode {
 	public static String debug = System.getenv("DEBUG");
@@ -9,9 +9,9 @@ public class DebugMode {
 		return (debug != null && Boolean.valueOf(debug));
 	}
 	public static boolean isDebug() {
-		return isDebug(ShrineDebug.DEBUG);
+		return isDebug(ShrineDebugEnum.DEBUG);
 	}
-	public static boolean isDebug(ShrineDebug shrineDebug) {
-		return (getSystemDebug()) == shrineDebug.getState() || ShrineDebug.BOTH.equals(shrineDebug);
+	public static boolean isDebug(ShrineDebugEnum shrineDebug) {
+		return (getSystemDebug()) == shrineDebug.getState() || ShrineDebugEnum.BOTH.equals(shrineDebug);
 	}
 }

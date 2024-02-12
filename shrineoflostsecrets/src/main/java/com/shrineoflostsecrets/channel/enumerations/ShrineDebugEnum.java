@@ -1,6 +1,6 @@
 package com.shrineoflostsecrets.channel.enumerations;
 
-public enum ShrineDebug {
+public enum ShrineDebugEnum {
 	// Enum constants with id, name, and description
 	PROUCTION(false), DEBUG(true), BOTH(false);
 
@@ -8,7 +8,7 @@ public enum ShrineDebug {
 	private final boolean state;
 
 	// Constructor for enum
-	ShrineDebug(boolean state) {
+	ShrineDebugEnum(boolean state) {
 		this.state = state;
 	}
 

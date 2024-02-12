@@ -15,4 +15,7 @@ public class JSPConstants {
 	public static final String ADMINUSERL = "/admin/user.jsp";
 	public static final String ADMINSHOW = "/admin/show.jsp";
 	public static final String ADMINCHANNELEVENT = "/admin/channelEvent.jsp";
+
+	public static final int MAXUSERNAMELENGTH = 20;
+	public static final int MINMESSAGESIZE = 10;
 }

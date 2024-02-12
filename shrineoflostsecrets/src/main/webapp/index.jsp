@@ -9,7 +9,7 @@ String sessionAuth = (String) request.getSession().getAttribute("auth");
 if (sessionAuth != null && !su.isValue()) {
 	// Use the auth from the session if there is no auth in the URL
 	su.loadShrineUser(sessionAuth);
-	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebug.PROUCTION, "User " + sessionAuth + " at the Index Page");
+	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " at the Index Page");
 
 }
 %>
@@ -217,7 +217,7 @@ List<Entity> listChanels = ShrineChannelService.listChannels();
 							<h3>Top Comment</h3>
 							<p><%=channel.getTwitchBestQuote()%></p>
 						</div>
-						<a href="<%if(live){%><%=JSPConstants.CHANNELEVENTDYNAMIC%><%}else{ %><%=JSPConstants.CHANNELEVENT%><%}%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a> - <a href="<%=JSPConstants.CHANNELVOTE%>?channel=<%=channel.getTwitchChannel()%>">Score Board!</a>
+						<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a>
 					</div>
 				</div>
 <%}}%>

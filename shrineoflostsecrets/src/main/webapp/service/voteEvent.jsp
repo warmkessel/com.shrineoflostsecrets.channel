@@ -2,6 +2,7 @@
 	pageEncoding="UTF-8"%><%@ page
 	import="java.util.*,com.shrineoflostsecrets.channel.util.*,org.json.JSONObject, com.google.cloud.datastore.*, com.shrineoflostsecrets.channel.database.datastore.*, com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.enumerations.*"%>
 <%
+
 response.setHeader("Content-Type", "application/json");
 
 boolean theReturn = false;
@@ -13,6 +14,6 @@ if(sessionAuth != null && !sessionAuth.isBlank()){
 	long amount = Long.valueOf(request.getParameter("amount"));
 	theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
 
-	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebug.PROUCTION, "User " + sessionAuth + " Channel " + channel + " id " + id + " safe " + safe+ " amount " + amount);
+	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " Channel " + channel + " id " + id + " safe " + safe+ " amount " + amount);
 }
 %><%=theReturn%>
