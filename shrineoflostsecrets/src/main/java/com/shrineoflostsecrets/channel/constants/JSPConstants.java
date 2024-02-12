@@ -18,4 +18,5 @@ public class JSPConstants {
 
 	public static final int MAXUSERNAMELENGTH = 20;
 	public static final int MINMESSAGESIZE = 20;
+	public static final String IRCCOMMAND = "!";
 }

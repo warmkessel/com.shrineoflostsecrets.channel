@@ -12,13 +12,14 @@ import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.cloud.datastore.Transaction;
 import com.google.common.collect.Lists;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
+import com.shrineoflostsecrets.channel.enumerations.ShrineServiceTypeEnum;
 
 public class ShrineVoteService {
 
-	public static List<Entity> listVotes(String channel, boolean safe) {
+	public static List<Entity> listVotes(String channel, ShrineServiceTypeEnum service) {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 		Query<Entity> query = null;
-		if (safe) {
+		if (service.getSafe()) {
 			query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINEVOTE)
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.DELETED, false))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel))

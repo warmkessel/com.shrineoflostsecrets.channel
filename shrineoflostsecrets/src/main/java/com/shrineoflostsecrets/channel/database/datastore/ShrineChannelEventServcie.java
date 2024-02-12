@@ -13,19 +13,20 @@ import com.google.cloud.datastore.StructuredQuery.OrderBy;
 import com.google.cloud.datastore.StructuredQuery.PropertyFilter;
 import com.google.common.collect.Lists;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
+import com.shrineoflostsecrets.channel.enumerations.ShrineServiceTypeEnum;
 
-public class ShrineChannelEventList {
+public class ShrineChannelEventServcie {
 	//private static final Logger logger = LoggerFactory.getLogger(ShrineChannelEventList.class);
 
-	public static List<Entity> listChanelEvents(String channel, String userName, Boolean ban, Boolean unlimitedSize){
+	public static List<Entity> listChanelEvents(String channel, String userName, ShrineServiceTypeEnum service, Boolean unlimitedSize){
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 		// Run the query and retrieve a list of matching entities
-		QueryResults<Entity> results = datastore.run(buildQuery(channel, userName, ban, unlimitedSize));
+		QueryResults<Entity> results = datastore.run(buildQuery(channel, userName, service, unlimitedSize));
 		List<Entity> entities = Lists.newArrayList(results);
 		return entities;
 	}
 
-	private static Query<Entity> buildQuery(String channel, String userName, Boolean ban,
+	private static Query<Entity> buildQuery(String channel, String userName, ShrineServiceTypeEnum service,
 			Boolean unlimitedSize) {
 		// Start with a basic filter for the mandatory 'DELETED' property
 		Filter baseFilter = PropertyFilter.eq(TwitchChannelConstants.DELETED, false);
@@ -44,11 +45,12 @@ public class ShrineChannelEventList {
 
 		// Add filters based on the ban flag
 
-		if (ban != null && ban) {
+		if (service.getBan()) {
 			baseFilter = CompositeFilter.and(baseFilter, CompositeFilter.or(
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONUSERBAN),
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAGE)));
-		} else if (ban != null) {
+		}
+		else{
 			baseFilter = CompositeFilter.and(baseFilter, CompositeFilter.or(
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGE),
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONUSERBAN),

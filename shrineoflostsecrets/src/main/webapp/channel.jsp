@@ -1,6 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java"%>
 <%@ page
-	import="com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.enumerations.*"%>
+	import="com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.enumerations.*,com.shrineoflostsecrets.channel.constants.*"%>
 <%
 boolean unlimited = Boolean.valueOf(request.getParameter("unlimited"));
 ShrineServiceTypeEnum serviceType = ShrineServiceTypeEnum.findById(request.getParameter("serviceType"));
@@ -36,7 +36,7 @@ if (sessionAuth != null && !su.isValid()) {
                 console.info('Fetching votes');
 
                 // Fetch events from the server
-                const response = await fetch('/service/listVotesService.jsp?channel=<%=channel.getTwitchChannel()%>&safe=<%=safe%>');
+                const response = await fetch('/service/listVotesService.jsp?channel=<%=channel.getTwitchChannel()%>&serviceType=<%=serviceType%>');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -68,7 +68,7 @@ if (sessionAuth != null && !su.isValid()) {
                     		'<div class="fact-icon">' +
                         	'<i class="fa fa-trophy fa-lg"></i>' +
                     		'</div>' +
-                    		'<span">Total Votes: ' + vote.amount + '</span>' +
+                    		'<span">Total <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Votes</a>: ' + vote.amount + '</span>' +
                     		'<p>' + vote.message + '</p>' +
                     		'<p>By: ' + vote.twitchUser + '</p>' +
                     		'<a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>'+
@@ -87,7 +87,7 @@ if (sessionAuth != null && !su.isValid()) {
 
                 // Fetch events from the server
                 const response = await fetch('/service/channelEventJson.jsp?channel=<%=channel.getTwitchChannel()
-                %>&serviceType=<%=serviceType.toString()%>&userName=<%=userName%>&unlimited=<%=unlimited%>');
+                %>&serviceType=<%=serviceType%>&userName=<%=userName%>');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -105,7 +105,7 @@ if (sessionAuth != null && !su.isValid()) {
                 data.events.forEach(event => {
                     const eventElement = document.createElement('div');
                     eventElement.className = 'col-md-3 col-sm-6 col-xs-12';                    
-                    eventElement.innerHTML = '<div class="col-md-12 col-sm-12">' +
+                   var cnt = '<div class="col-md-12 col-sm-12">' +
                 	'<div class="media">' +
                     '<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&userName=' + event.twitchUser + '">' +
                     '<img src="' + event.logo + '" class="media-object" alt="Monitor">' +
@@ -114,10 +114,22 @@ if (sessionAuth != null && !su.isValid()) {
                     '<h3><a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&userName=' + event.twitchUser + '">' + event.twitchUser + '</a></h3>' +
                     '</div>' +
                     '</div>' +
-                    '</div>' +
-                    '<p>' + event.message + '</p>'+
-                    '<a href="javascript:void(0);" onclick="vote(\'' + event.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>'+
-                    '</div>';            
+                    '</div>';
+
+                    if("<%=TwitchChannelConstants.ONUSERBAN%>" == event.eventType){
+                    	cnt = cnt + '<p class="deleted"">User ' + event.twitchUser + ' was Banned!</p>';
+                    }
+                    else if("<%=TwitchChannelConstants.ONDELETEMESSAGE%>" == event.eventType){
+                    	cnt = cnt + '<p class="deleted"">' + event.message + '</p>';
+                    }
+                    else{
+                    	cnt = cnt + '<p>' + event.message + '</p>';
+                    }
+                    
+                    cnt = cnt + '<a href="javascript:void(0);" onclick="vote(\'' + event.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>'+
+                    '</div>';
+                    eventElement.innerHTML = cnt;
+
                 	eventContainer.appendChild(eventElement);
                 });
             } catch (error) {
@@ -230,8 +242,8 @@ if (sessionAuth != null && !su.isValid()) {
 			<nav class="collapse navigation navbar-collapse navbar-right"
 				role="navigation">
 				<ul id="nav" class="nav navbar-nav">
-					<li class="current"><a href="#home">Home</a></li>
-					<li><a href="<%=JSPConstants.INDEX%>#channel">Channels</a></li>
+					<li><a href="<%=JSPConstants.INDEX%>#home">Home</a></li>
+					<li class="current"><a href="<%=JSPConstants.INDEX%>#channel">Channels</a></li>
 					<li><a href="<%=JSPConstants.INDEX%>#voting">Voting</a></li>
 					<li><a href="<%=JSPConstants.INDEX%>#contact">Contact</a></li>
 				</ul>

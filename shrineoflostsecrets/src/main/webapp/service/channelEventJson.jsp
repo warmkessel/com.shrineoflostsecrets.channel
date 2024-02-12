@@ -22,26 +22,30 @@ shrineChannel.loadShrineChannelName(channel);
 HashMap<String, String> logo = new HashMap();
 try {
 	List<Entity> listChannels = null;
-	listChannels = ShrineChannelEventList.listChanelEvents(requestChannel, userName, serviceType.getBan(), unlimited);
+	listChannels = ShrineChannelEventServcie.listChanelEvents(requestChannel, userName, serviceType, unlimited);
 	for (Entity entity : listChannels) {
 		ShrineChannelEvent channelEvent = new ShrineChannelEvent();
 		channelEvent.loadFromEntity(entity);
 		if (
-			!Arrays.asList(TwitchChannelConstants.BOTS).contains(channelEvent.getTwitchUser())
-			&& !channelEvent.getMessage().isBlank()
-			&&(
-				(ShrineServiceTypeEnum.LIMITED.equals(serviceType)
-				&& channelEvent.getMessage().length() > JSPConstants.MINMESSAGESIZE))
-				||(ShrineServiceTypeEnum.FULL.equals(serviceType))
-				||(ShrineServiceTypeEnum.SAVE.equals(serviceType))
+	!Arrays.asList(TwitchChannelConstants.BOTS).contains(channelEvent.getTwitchUser())
+	&& !channelEvent.getMessage().isBlank()
+	&&(
+		(ShrineServiceTypeEnum.LIMITED.equals(serviceType)
+		&& channelEvent.getMessage().length() > JSPConstants.MINMESSAGESIZE)
+		&& !channelEvent.getMessage().startsWith(JSPConstants.IRCCOMMAND))
+		||(ShrineServiceTypeEnum.FULL.equals(serviceType))
+		||(ShrineServiceTypeEnum.BAN.equals(serviceType)) 
+		||(ShrineServiceTypeEnum.SAFE.equals(serviceType) 
+		&& channelEvent.getMessage().length() > JSPConstants.MINMESSAGESIZE)
+		&& !channelEvent.getMessage().startsWith(JSPConstants.IRCCOMMAND)
 		){
 	if (!logo.containsKey(channelEvent.getTwitchUser())) {
 		ShrineChannel foundChannel = new ShrineChannel();
 		foundChannel.loadShrineChannelName(channelEvent.getTwitchUser());
 		if (foundChannel.isValid()) {
-			logo.put(channelEvent.getTwitchUser(), foundChannel.getTwitchLogoImg());
+	logo.put(channelEvent.getTwitchUser(), foundChannel.getTwitchLogoImg());
 		} else {
-			logo.put(channelEvent.getTwitchUser(), shrineChannel.getTwitchLogoImg());
+	logo.put(channelEvent.getTwitchUser(), shrineChannel.getTwitchLogoImg());
 
 		}
 	}

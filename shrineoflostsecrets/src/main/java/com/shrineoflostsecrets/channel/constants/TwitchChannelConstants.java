@@ -21,6 +21,8 @@ public class TwitchChannelConstants extends BaseEntityConstants{
 
 	
 	public static final String OTPPASS = "Otppass";
+	public static final String VOTEREMAINING = "VotesRemaining";
+	public static final String VOTEMULTIPLIER = "VoteMultiplier";
 	
 	public static final String TWITCHCHANNEL = "TwitchChannel";
 	public static final String DISCORDCHANNEL = "DiscordChannel";

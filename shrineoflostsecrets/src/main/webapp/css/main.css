@@ -975,3 +975,10 @@ figcaption.mask span {
 .copyright p:first-child {
     margin-bottom: 15px;
 }
+.deleted{
+	color:red;
+}
+.vote{
+	color:red;
+}
+

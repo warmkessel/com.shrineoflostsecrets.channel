@@ -1,19 +1,19 @@
 <%@ page language="java" contentType="application/json; charset=UTF-8"
 	pageEncoding="UTF-8"%>
 <%@ page
-	import="java.util.*,com.google.cloud.datastore.*,org.json.*,com.shrineoflostsecrets.channel.database.datastore.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.constants.*"%>
+	import="java.util.*,com.google.cloud.datastore.*,org.json.*,com.shrineoflostsecrets.channel.database.datastore.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.enumerations.*"%>
 <%
 response.setHeader("Content-Type", "application/json");
 
 String channel = request.getParameter("channel");
-boolean safe = Boolean.parseBoolean(request.getParameter("safe"));
+ShrineServiceTypeEnum serviceType = ShrineServiceTypeEnum.findById(request.getParameter("serviceType"));
 
 // Assume ShrineVoteService is a class that abstracts datastore operations
 
 JSONArray jsonEvents = new JSONArray();
 JSONArray jsonVotes = new JSONArray();
 
-	List<Entity> listVotes = ShrineVoteService.listVotes(channel, safe);
+	List<Entity> listVotes = ShrineVoteService.listVotes(channel, serviceType);
 	for (Entity entity : listVotes) {
 		ShrineVote vote = new ShrineVote();
 		vote.loadFromEntity(entity);

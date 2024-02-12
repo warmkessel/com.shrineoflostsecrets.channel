@@ -1,5 +1,5 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8" pageEncoding="UTF-8"%>
-<%@ page import="java.util.*,java.net.*,java.nio.charset.*,com.google.cloud.datastore.*,com.google.appengine.api.users.*,com.shrineoflostsecrets.channel.database.datastore.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*"%>
+<%@ page import="java.util.*,java.net.*,java.nio.charset.*,com.google.cloud.datastore.*,com.google.appengine.api.users.*,com.shrineoflostsecrets.channel.database.datastore.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.enumerations.*"%>
 <%
 UserService userService = UserServiceFactory.getUserService();
 User currentUser = userService.getCurrentUser();
@@ -15,7 +15,7 @@ String channel = request.getParameter("channel");
 if(channel == null || channel.isBlank()){
 	channel="lazeruss";
 }
-List<Entity> listVotes = ShrineVoteService.listVotes(channel, true); // Retrieve list of Votes
+List<Entity> listVotes = ShrineVoteService.listVotes(channel, ShrineServiceTypeEnum.FULL); // Retrieve list of Votes
 %>
 
 <!DOCTYPE html>
