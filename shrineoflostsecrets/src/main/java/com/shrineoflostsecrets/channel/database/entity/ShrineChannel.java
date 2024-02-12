@@ -35,6 +35,13 @@ public class ShrineChannel extends BaseEntity implements Comparable<ShrineChanne
 	public ShrineChannel() {
 	}
 
+	public boolean isValid() {
+		return (getTwitchUserName() != null && getTwitchUserName().length() > 0);
+	}
+	public boolean isLive() {
+		return (getTwitchLastStart().getSeconds() - getTwitchLastEnd().getSeconds() > 0);
+	}
+	
 	public String getTwitchUserName() {
 		return twitchUserName;
 	}

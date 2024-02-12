@@ -23,7 +23,7 @@ public class ShrineUser extends BaseEntity implements Comparable<ShrineUser> {
 
 	public ShrineUser() {
 	}
-	public boolean isValue() {
+	public boolean isValid() {
 		return (getTwitchUserName() != null && getTwitchUserName().length() > 0);
 	}
 	public void loadShrineOTP(String pass) {

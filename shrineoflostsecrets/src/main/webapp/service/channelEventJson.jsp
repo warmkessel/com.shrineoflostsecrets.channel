@@ -17,16 +17,37 @@ String channel = (requestChannel != null && !requestChannel.isEmpty()) ? request
 
 JSONArray jsonEvents = new JSONArray();
 
+ShrineChannel shrineChannel = new ShrineChannel();
+shrineChannel.loadShrineChannelName(channel);
+HashMap<String, String> logo = new HashMap();
 try {
 	List<Entity> listChannels = null;
 	listChannels = ShrineChannelEventList.listChanelEvents(requestChannel, userName, serviceType.getBan(), unlimited);
 	for (Entity entity : listChannels) {
 		ShrineChannelEvent channelEvent = new ShrineChannelEvent();
 		channelEvent.loadFromEntity(entity);
-		if (!Arrays.asList(TwitchChannelConstants.BOTS).contains(channelEvent.getTwitchUser())
-		&& !channelEvent.getMessage().isBlank() || (ShrineServiceTypeEnum.LIMITED.equals(serviceType) && channelEvent.getMessage().length() < JSPConstants.MINMESSAGESIZE)) {
+		if (
+			!Arrays.asList(TwitchChannelConstants.BOTS).contains(channelEvent.getTwitchUser())
+			&& !channelEvent.getMessage().isBlank()
+			&&(
+				(ShrineServiceTypeEnum.LIMITED.equals(serviceType)
+				&& channelEvent.getMessage().length() > JSPConstants.MINMESSAGESIZE))
+				||(ShrineServiceTypeEnum.FULL.equals(serviceType))
+				||(ShrineServiceTypeEnum.SAVE.equals(serviceType))
+		){
+	if (!logo.containsKey(channelEvent.getTwitchUser())) {
+		ShrineChannel foundChannel = new ShrineChannel();
+		foundChannel.loadShrineChannelName(channelEvent.getTwitchUser());
+		if (foundChannel.isValid()) {
+			logo.put(channelEvent.getTwitchUser(), foundChannel.getTwitchLogoImg());
+		} else {
+			logo.put(channelEvent.getTwitchUser(), shrineChannel.getTwitchLogoImg());
+
+		}
+	}
 	JSONObject jsonEvent = new JSONObject();
 	jsonEvent.put("id", channelEvent.getId());
+	jsonEvent.put("logo", logo.get(channelEvent.getTwitchUser()));
 	jsonEvent.put("createdDate", DateFormatter.convertToHourAndMin(channelEvent.getCreatedDate()));
 	jsonEvent.put("twitchUser", StringUtil.slice(channelEvent.getTwitchUser(), JSPConstants.MAXUSERNAMELENGTH));
 	jsonEvent.put("eventType", channelEvent.getEventType());

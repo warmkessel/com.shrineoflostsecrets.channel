@@ -6,11 +6,10 @@
 ShrineUser su = new ShrineUser();
 // Check if there is a stored auth value in the session
 String sessionAuth = (String) request.getSession().getAttribute("auth");
-if (sessionAuth != null && !su.isValue()) {
+if (sessionAuth != null && !su.isValid()) {
 	// Use the auth from the session if there is no auth in the URL
 	su.loadShrineUser(sessionAuth);
 	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " at the Index Page");
-
 }
 %>
 <!DOCTYPE html>
@@ -90,7 +89,7 @@ if (sessionAuth != null && !su.isValue()) {
 
 				<!-- logo -->
 				<h1 class="navbar-brand">
-					<a href="#body"> <img src="img/logo.png" alt="Shrine Of Lost Secrets Logo">
+					<a href="#body"> <img src="img/logo-sm.jpg" alt="Shrine Of Lost Secrets Logo">
 					</a>
 				</h1>
 				<!-- /logo -->
@@ -199,28 +198,29 @@ if (sessionAuth != null && !su.isValue()) {
 			<div class="row">
 
 <%
-List<Entity> listChanels = ShrineChannelService.listChannels();
+	List<Entity> listChanels = ShrineChannelService.listChannels();
     	for(Entity entity: listChanels) {
     		ShrineChannel channel = new ShrineChannel();
     		channel.loadFromEntity(entity);
     		if(!Constants.SHRINEOFLOSTSECRETS.equals(channel.getTwitchChannel())){
-    		boolean live = (channel.getTwitchLastStart().getSeconds() - channel.getTwitchLastEnd().getSeconds() > 0);
 %>
 				<div class="col-md-6 col-sm-12 wow fadeInLeft">
 					<div class="media">
-						<a href="https://www.twitch.tv/<%=channel.getTwitchChannel() %>" class="pull-left" target="_blank"><img
+						<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>" class="pull-left"><img
 							class="InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar"
 							alt="<%=channel.getTwitchChannel() %>" alt="Cog"
 							src="<%=channel.getTwitchLogoImg()%>">
 						</a>
 						<div class="media-body">
-							<h3>Top Comment</h3>
+							<h3><a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>"><%=StringUtil.capitalizeFirstLetter(channel.getTwitchChannel()) %></a></h3>
 							<p><%=channel.getTwitchBestQuote()%></p>
+							<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a>
+							
 						</div>
-						<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a>
 					</div>
 				</div>
-<%}}%>
+<%			}
+    	}%>
 
 			</div>
 			<!-- end .row -->
@@ -429,11 +429,11 @@ List<Entity> listChanels = ShrineChannelService.listChannels();
 				<div class="col-lg-12">
 
 					<div class="footer-logo wow fadeInDown">
-						<img src="img/logo.png" alt="logo">
+						<img src="img/logo.jpg" alt="logo">
 					</div>
 
 					<div class="footer-social wow fadeInUp">
-						<h3>We are not very social</h3>
+						<h3>Social</h3>
 						<ul class="text-center list-inline">
 							<li><a href="https://www.twitch.tv/shrineoflostsecrets"
 								target="_blank"><i class="fa fa-twitch fa-lg"></i></a></li>

@@ -11,11 +11,11 @@ String auth = uri.substring(uri.lastIndexOf("/a/") + 3);
 if (auth.length() > 0) {
     // Store the auth value in the session
     su.loadShrineOTP(auth);
-    if(su.isValue()){
+    if(su.isValid()){
         session.setAttribute("auth", su.getKeyString());
 
     } 
-} 
+}
 %>
 <%
     response.sendRedirect(request.getContextPath() + "/");

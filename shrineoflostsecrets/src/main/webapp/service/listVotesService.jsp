@@ -25,6 +25,7 @@ JSONArray jsonVotes = new JSONArray();
 		jsonVote.put("message", channelEvent.getMessage());
 		jsonVote.put("twitchUser", StringUtil.slice(channelEvent.getTwitchUser(), JSPConstants.MAXUSERNAMELENGTH));
 		jsonVote.put("createdDate", channelEvent.getCreatedDate().toString()); // You may need to format this date
+		jsonVote.put("id", channelEvent.getId());
 
 		jsonVotes.put(jsonVote);
 	}

@@ -23,13 +23,13 @@ public class ShrineVoteService {
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.DELETED, false))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.SAFE, true))
-					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT)).setLimit(4).build();
+					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT)).setLimit(5).build();
 
 		} else {
 			query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINEVOTE)
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.DELETED, false))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel))
-					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT)).setLimit(4).build();
+					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT)).setLimit(5).build();
 		}
 		// Run the query and retrieve a list of matching entities
 		QueryResults<Entity> results = datastore.run(query);
