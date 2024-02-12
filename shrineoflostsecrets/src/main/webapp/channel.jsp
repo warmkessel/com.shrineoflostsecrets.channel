@@ -57,7 +57,7 @@ if (sessionAuth != null && !su.isValid()) {
                 data.votes.forEach(vote => { 
     					if(first){
     						first=false;	
-    						document.getElementById('headline').innerHTML = 'Total Votes: ' + vote.amount + ' - ' + vote.message;
+    						document.getElementById('headline').innerHTML = 'Total <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Votes</a>: ' + vote.amount + ' - ' + vote.message;
     						document.getElementById('by').innerHTML = 'By: <a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&userName=' + vote.twitchUser + '">' +  vote.twitchUser + '</a>'+ 
                     		' - <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>';
     					}
@@ -144,6 +144,8 @@ if (sessionAuth != null && !su.isValid()) {
                 });
                 const data = await response.text(); // Assuming the response is text
                 console.info("Vote Recorded " + data);
+                fetchAndDisplayVotes();
+
 /*                 alert(data); // Show the response in an alert box
  */            } catch (error) {
                 console.error('Error during fetch:', error);

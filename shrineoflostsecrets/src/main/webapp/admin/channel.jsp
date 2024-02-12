@@ -75,12 +75,10 @@ List<Entity> listChannels = ShrineChannelService.listChannels(); // Retrieve lis
             channelList.loadFromEntity(entity);
         %>
         <tr>
-            <td><a href="<%=JSPConstants.ADMINCHANNEL%>?id=<%=channelList.getId()%>"><%=channelList.getId()%></a></td>
-            <td><a
-                href="<%=JSPConstants.CHANNELEVENT%>?channel=<%=channelList.getTwitchChannel()%>">
-                    <%=channelList.getTwitchChannel()%>
+            <td><a href="<%=JSPConstants.ADMINCHANNEL%>?id=<%=channelList.getId()%>">
+                    <%=channelList.getKeyString()%>
             </a></td>
-            <td><%=channelList.getTwitchUserName()%></td>
+            <td><a href="https://www.twitch.tv/<%=channelList.getTwitchChannel()%>"><%=channelList.getTwitchChannel()%></a></td>
             <td><img src="<%=channelList.getTwitchLogoImg()%>" alt="Twitch Logo" width="100" height="100"></td>
             <td><%=channelList.getTwitchBestQuote()%></td>
         </tr>
