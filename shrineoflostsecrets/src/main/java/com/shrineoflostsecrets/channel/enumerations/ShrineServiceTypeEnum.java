@@ -2,10 +2,10 @@ package com.shrineoflostsecrets.channel.enumerations;
 
 public enum ShrineServiceTypeEnum {
     // Enum constants
-    FULL("full", false, false),
-    SAFE("safe", true, false),
-    LIMITED("limited", false, false),
-    BAN("ban", false, true);
+    FULL("Full", false, false),
+    SAFE("Safe", true, false),
+    LIMITED("Limited", false, false),
+    BAN("Ban", false, true);
 
     // Fields for the enum properties
     private final String name;

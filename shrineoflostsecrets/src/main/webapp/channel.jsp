@@ -325,7 +325,13 @@ if (sessionAuth != null && !su.isValid()) {
         ========================== -->
 	<section id="service">
 		<div class="section-title text-center wow fadeInDown">
-			<h2>Channel: <a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>"><%=channel.getTwitchChannel() %></a></h2>
+			<h2>Channel: <a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>"><%=channel.getTwitchChannel() %> <%if (channel.isLive()) {%>Live !<%}%>
+			</a></h2>
+			<p>
+			<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&serviceType=<%=ShrineServiceTypeEnum.SAFE.getName()%>"><%=ShrineServiceTypeEnum.SAFE.getName()%></a> | 
+			<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&serviceType=<%=ShrineServiceTypeEnum.LIMITED.getName()%>"><%=ShrineServiceTypeEnum.LIMITED.getName()%></a> | 
+			<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&serviceType=<%=ShrineServiceTypeEnum.FULL.getName()%>"><%=ShrineServiceTypeEnum.FULL.getName()%></a> | 
+			<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&serviceType=<%=ShrineServiceTypeEnum.BAN.getName()%>"><%=ShrineServiceTypeEnum.BAN.getName()%></a></p>
 			<%if(null != userName && userName.length() > 0){ %>
 			<h3>User Filter:<%=userName %></h3>
 			<%}%>

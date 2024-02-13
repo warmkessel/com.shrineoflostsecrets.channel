@@ -2,6 +2,9 @@ package com.shrineoflostsecrets.channel.collector.twitch;
 
 import javax.security.auth.login.LoginException;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 import com.github.philippheuer.credentialmanager.domain.OAuth2Credential;
 import com.github.philippheuer.events4j.api.domain.IDisposable;
 import com.github.philippheuer.events4j.reactor.ReactorEventHandler;
@@ -18,9 +21,10 @@ import com.github.twitch4j.pubsub.events.RewardRedeemedEvent;
 import com.shrineoflostsecrets.channel.collector.Launcher;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
+import com.shrineoflostsecrets.channel.database.entity.ShrineChannelEvent;
 
 public class ShrineCapture extends ServiceAbstract {
-//	private static final Logger logger = LoggerFactory.getLogger(ShrineCapture.class);
+	private static final Logger logger = LoggerFactory.getLogger(ShrineCapture.class);
 
 	IDisposable handlerReg = null;
 
@@ -89,8 +93,23 @@ public class ShrineCapture extends ServiceAbstract {
 	}
 
 	public void onDeleteMessageEvent(DeleteMessageEvent event) {
+		logger.debug("xxxx Delete");
 		log(TwitchChannelConstants.ONDELETEMESSAGE, event.getEventId(), event.getChannel().getName(),
 				event.getUserName(), event.getMessage());
+		logger.debug("xxxx origEvent");
+		ShrineChannelEvent origEvent = new ShrineChannelEvent();
+		
+		logger.debug("xxxx load");
+		origEvent.loadShrineOrigEventId(event.getMsgId());
+		logger.debug("xxxx origEvent.isValid() " + origEvent.isValid());
+
+		if(origEvent.isValid()) {
+			logger.debug("xxxx setDeleted " + origEvent.getDeleted());
+			origEvent.setDeleted(true);
+			logger.debug("xxxx setDeleted2 " + origEvent.getDeleted());
+			origEvent.save();
+			logger.debug("xxxx Save ");
+		}
 	}
 
 	@SuppressWarnings("deprecation")

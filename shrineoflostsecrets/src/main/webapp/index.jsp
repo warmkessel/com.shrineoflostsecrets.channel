@@ -212,7 +212,7 @@ if (sessionAuth != null && !su.isValid()) {
 							src="<%=channel.getTwitchLogoImg()%>">
 						</a>
 						<div class="media-body">
-							<h3><a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>"><%=StringUtil.capitalizeFirstLetter(channel.getTwitchChannel()) %></a></h3>
+							<h3><a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>"><%=StringUtil.capitalizeFirstLetter(channel.getTwitchChannel()) %></a> <%if (channel.isLive()) {%>Live !<%}%></h3>
 							<p><%=channel.getTwitchBestQuote()%></p>
 							<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a>
 							

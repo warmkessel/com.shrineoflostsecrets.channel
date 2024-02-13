@@ -4,6 +4,8 @@ import com.google.cloud.datastore.Entity;
 import com.google.cloud.datastore.Key;
 import com.shrineoflostsecrets.channel.constants.Constants;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
+import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelEventServcie;
+import com.shrineoflostsecrets.channel.database.datastore.ShrineUserService;
 
 public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineChannelEvent> {
 
@@ -28,6 +30,15 @@ public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineC
 	public ShrineChannelEvent() {
 	}
 
+	public boolean isValid() {
+		return (getTwitchChannel() != null && getTwitchChannel().length() > 0);
+	}	
+	public void loadShrineOrigEventId(String msgId) {
+		// log.info("key " + key.toString());
+		loadFromEntity(ShrineChannelEventServcie.fetchMsgId(msgId));
+
+	}
+	
 	public void loadTwitchStream(Key key) {
 		// log.info("key " + key.toString());
 		Entity event = getDatastore().get(key);

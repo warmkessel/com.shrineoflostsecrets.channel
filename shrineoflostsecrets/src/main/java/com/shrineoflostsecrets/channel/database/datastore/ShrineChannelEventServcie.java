@@ -50,6 +50,10 @@ public class ShrineChannelEventServcie {
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONUSERBAN),
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAGE)));
 		}
+		else if (service.isSafe()) {
+			baseFilter = CompositeFilter.and(baseFilter, 
+					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGE));
+		}
 		else{
 			baseFilter = CompositeFilter.and(baseFilter, CompositeFilter.or(
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGE),
@@ -67,4 +71,19 @@ public class ShrineChannelEventServcie {
 		
 		return query;
 	}
+	public static Entity fetchMsgId(String msgId) {
+		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
+		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
+				.setFilter( PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTID, msgId)).build();
+		// Run the query and retrieve a list of matching entities
+		QueryResults<Entity> results = datastore.run(query);
+		List<Entity> entities = Lists.newArrayList(results);
+		if(entities.size() == 0) {
+			return null;
+		}
+		else{
+			return entities.get(0);
+		}
+	}
+	
 }

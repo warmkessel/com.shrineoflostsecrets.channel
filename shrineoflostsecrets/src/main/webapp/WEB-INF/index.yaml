@@ -23,6 +23,13 @@ indexes:
         direction: desc
   - kind: ShrineVote
     properties:
+      - name: Safe
+      - name: ShrineVoteAmount
+        direction: desc
+      - name: UpdatedDate
+        direction: desc
+  - kind: ShrineVote
+    properties:
       - name: TwitchChannel
       - name: Safe
       - name: ShrineVoteAmount
