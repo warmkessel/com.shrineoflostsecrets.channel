@@ -8,11 +8,14 @@ public class JSPConstants {
 	public static final String CHANNELVOTE = "/channelVotes.jsp";
 
 	public static final String SERVICEVOTE = "/service/voteEvent.jsp?";
+	public static final String SERVICELISTVOTE = "/service/listVotesService.jsp?";
 	public static final String SERVICECHANNELEVENT = "/service/channelEventJson.jsp";
+	public static final String SERVICEUSER = "/service/user.jsp";
 	
 	public static final String ADMININDEX = "/admin/index.jsp";
 	public static final String ADMINCHANNEL = "/admin/channel.jsp";
 	public static final String ADMINUSERL = "/admin/user.jsp";
+	public static final String ADMINVOTERESET = "/admin/voteUpdate.jsp";
 	public static final String ADMINSHOW = "/admin/show.jsp";
 	public static final String ADMINCHANNELEVENT = "/admin/channelEvent.jsp";
 

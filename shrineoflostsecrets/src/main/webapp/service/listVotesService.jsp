@@ -6,6 +6,7 @@
 response.setHeader("Content-Type", "application/json");
 
 String channel = request.getParameter("channel");
+
 ShrineServiceTypeEnum serviceType = ShrineServiceTypeEnum.findById(request.getParameter("serviceType"));
 
 // Assume ShrineVoteService is a class that abstracts datastore operations
@@ -13,7 +14,7 @@ ShrineServiceTypeEnum serviceType = ShrineServiceTypeEnum.findById(request.getPa
 JSONArray jsonEvents = new JSONArray();
 JSONArray jsonVotes = new JSONArray();
 
-	List<Entity> listVotes = ShrineVoteService.listVotes(channel, serviceType);
+	List<Entity> listVotes = ShrineVoteService.listVotes(((channel != null && !channel.isEmpty()) ? channel : "shrineoflostsecrets"), serviceType);
 	for (Entity entity : listVotes) {
 		ShrineVote vote = new ShrineVote();
 		vote.loadFromEntity(entity);

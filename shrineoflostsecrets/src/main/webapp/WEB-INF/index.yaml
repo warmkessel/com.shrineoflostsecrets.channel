@@ -27,8 +27,12 @@ indexes:
       - name: Safe
       - name: ShrineVoteAmount
         direction: desc
+      - name: UpdatedDate
+        direction: desc
   - kind: ShrineVote
     properties:
       - name: TwitchChannel
       - name: ShrineVoteAmount
+        direction: desc
+      - name: UpdatedDate
         direction: desc

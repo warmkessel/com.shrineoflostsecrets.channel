@@ -67,6 +67,8 @@ List<Entity> listChannels = ShrineChannelService.listChannels(); // Retrieve lis
 <title>Shrine Channel Management - <%=channel.getKeyLong()%></title>
 </head>
 <body>
+<a href="<%=JSPConstants.ADMININDEX%>">Index</a>
+
     <h1>Shrine Channel Management</h1>
     <table>
         <%

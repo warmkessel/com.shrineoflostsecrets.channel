@@ -5,6 +5,7 @@
 
 response.setHeader("Content-Type", "application/json");
 
+
 boolean theReturn = false;
 String sessionAuth = (String) request.getSession().getAttribute("auth");
 if(sessionAuth != null && !sessionAuth.isBlank()){
@@ -12,8 +13,14 @@ if(sessionAuth != null && !sessionAuth.isBlank()){
 	boolean safe = Boolean.valueOf(request.getParameter("safe"));
 	String channel = request.getParameter("channel");
 	long amount = Long.valueOf(request.getParameter("amount"));
-	theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
+	ShrineUser su = new ShrineUser();
+	su.loadShrineUser(sessionAuth);
+	if(su.isValid() && su.canVote()){
+		amount = VoteCaculator.caculateVote(su.vote(amount), su.getVoteMultiplier());		
+		theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
+	}
 
+	
 	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " Channel " + channel + " id " + id + " safe " + safe+ " amount " + amount);
 }
 %><%=theReturn%>

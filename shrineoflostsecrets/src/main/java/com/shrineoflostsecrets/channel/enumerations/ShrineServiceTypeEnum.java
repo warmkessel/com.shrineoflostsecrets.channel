@@ -7,14 +7,15 @@ public enum ShrineServiceTypeEnum {
     LIMITED("limited", false, false),
     BAN("ban", false, true);
 
-    // Field for the enum property
+    // Fields for the enum properties
     private final String name;
-    private final boolean ban;
     private final boolean safe;
+    private final boolean ban;
 
     // Constructor for enum
-    ShrineServiceTypeEnum(String name,  boolean safe, boolean ban) {
-        this.name = name;
+    ShrineServiceTypeEnum(String name, boolean safe, boolean ban) {
+        // Ensure name is stored in lowercase
+        this.name = name.toLowerCase();
         this.safe = safe;
         this.ban = ban;
     }
@@ -23,20 +24,25 @@ public enum ShrineServiceTypeEnum {
     public String getName() {
         return name;
     }
-    // Getter for the name
-    public boolean getBan() {
-        return ban;
-    }
-    // Getter for the name
-    public boolean getSafe() {
+
+    // Getter for the safe flag
+    public boolean isSafe() {
         return safe;
     }
 
-    // Method to find enum by name
+    // Getter for the ban flag
+    public boolean isBan() {
+        return ban;
+    }
+
+    // Method to find enum by name, comparing in lowercase
     public static ShrineServiceTypeEnum findById(String id) {
-        for (ShrineServiceTypeEnum value : ShrineServiceTypeEnum.values()) {
-            if (value.getName().equalsIgnoreCase(id)) {
-                return value;
+        if (id != null) {
+            String idLower = id.toLowerCase();
+            for (ShrineServiceTypeEnum value : values()) {
+                if (value.getName().equals(idLower)) {
+                    return value;
+                }
             }
         }
         // Default if no match is found

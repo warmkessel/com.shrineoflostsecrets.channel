@@ -36,7 +36,7 @@ if (sessionAuth != null && !su.isValid()) {
                 console.info('Fetching votes');
 
                 // Fetch events from the server
-                const response = await fetch('/service/listVotesService.jsp?channel=<%=channel.getTwitchChannel()%>&serviceType=<%=serviceType%>');
+                const response = await fetch('<%=JSPConstants.SERVICELISTVOTE%>channel=<%=channel.getTwitchChannel()%>&serviceType=<%=serviceType.getName()%>');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -57,9 +57,9 @@ if (sessionAuth != null && !su.isValid()) {
                 data.votes.forEach(vote => { 
     					if(first){
     						first=false;	
-    						document.getElementById('headline').innerHTML = 'Total <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Votes</a>: ' + vote.amount + ' - ' + vote.message;
+    						document.getElementById('headline').innerHTML = 'Total <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" class="vote">Votes</a>: ' + vote.amount + ' - ' + vote.message;
     						document.getElementById('by').innerHTML = 'By: <a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>&userName=' + vote.twitchUser + '">' +  vote.twitchUser + '</a>'+ 
-                    		' - <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>';
+                    		' - <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" class="vote">Vote!</a>';
     					}
     					else{
     	                    const voteElement = document.createElement('div');
@@ -68,10 +68,10 @@ if (sessionAuth != null && !su.isValid()) {
                     		'<div class="fact-icon">' +
                         	'<i class="fa fa-trophy fa-lg"></i>' +
                     		'</div>' +
-                    		'<span">Total <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Votes</a>: ' + vote.amount + '</span>' +
+                    		'<span">Total <a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" class="vote">Votes</a>: ' + vote.amount + '</span>' +
                     		'<p>' + vote.message + '</p>' +
                     		'<p>By: ' + vote.twitchUser + '</p>' +
-                    		'<a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>'+
+                    		'<a href="javascript:void(0);" onclick="vote(\'' + vote.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" class="vote">Vote!</a>'+
                 			'</div>';
                             votesContainer.appendChild(voteElement);
     					}
@@ -86,8 +86,8 @@ if (sessionAuth != null && !su.isValid()) {
                 console.info('Fetching Events');
 
                 // Fetch events from the server
-                const response = await fetch('/service/channelEventJson.jsp?channel=<%=channel.getTwitchChannel()
-                %>&serviceType=<%=serviceType%>&userName=<%=userName%>');
+                const response = await fetch('<%=JSPConstants.SERVICECHANNELEVENT%>?channel=<%=channel.getTwitchChannel()
+                %>&serviceType=<%=serviceType.getName()%>&userName=<%=userName%>');
                 if (!response.ok) {
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
@@ -117,16 +117,16 @@ if (sessionAuth != null && !su.isValid()) {
                     '</div>';
 
                     if("<%=TwitchChannelConstants.ONUSERBAN%>" == event.eventType){
-                    	cnt = cnt + '<p class="deleted"">User ' + event.twitchUser + ' was Banned!</p>';
+                    	cnt = cnt + '<p class="deleted">User ' + event.twitchUser + ' was Banned!</p>';
                     }
                     else if("<%=TwitchChannelConstants.ONDELETEMESSAGE%>" == event.eventType){
-                    	cnt = cnt + '<p class="deleted"">' + event.message + '</p>';
+                    	cnt = cnt + '<p class="deleted">' + event.message + '</p>';
                     }
                     else{
                     	cnt = cnt + '<p>' + event.message + '</p>';
                     }
                     
-                    cnt = cnt + '<a href="javascript:void(0);" onclick="vote(\'' + event.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" style="color:red;">Vote!</a>'+
+                    cnt = cnt + '<a href="javascript:void(0);" onclick="vote(\'' + event.id + '\', \'<%=channel.getTwitchChannel()%>\', \'100\'); return false;" class="vote">Vote!</a>'+
                     '</div>';
                     eventElement.innerHTML = cnt;
 
@@ -136,10 +136,36 @@ if (sessionAuth != null && !su.isValid()) {
                 console.error('Failed to fetch votes:', error);
             }
         }
+        
+        async function fetchAndDisplayUser() {
+            try {
+                console.info('Fetching User');
+
+                // Fetch events from the server
+                const response = await fetch('<%=JSPConstants.SERVICEUSER%>');
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                const data = await response.json();                
+
+                // Update the status div to indicate new events have been fetched
+                const statusDiv = document.getElementById('status');
+                const now = new Date();
+                const currentTime = now.getHours() + ':' + now.getMinutes() + ':' + now.getSeconds();
+                console.info( 'User have been fetched! Time: ' + currentTime);
+                document.getElementById('voteRemaining').innerHTML = data.voteRemaining;
+                document.getElementById('voteMulti').innerHTML = data.voteMulti;
+            } catch (error) {
+                console.error('Failed to fetch votes:', error);
+            }
+        }
      // Function to periodically fetch and display new votes
         function startUpdates() {
            fetchAndDisplayVotes(); // Initial fetch
            fetchAndDisplayChannelEvents(); // Initial fetch
+           <%if (su.isValid()) {%>
+           	fetchAndDisplayUser();
+           <%}%>
            <%if (channel.isLive()) {%>
            	setInterval(fetchAndDisplayVotes, 60000); // Repeat every 10 seconds
             setInterval(fetchAndDisplayChannelEvents, 10000); // Repeat every 10 seconds
@@ -157,7 +183,7 @@ if (sessionAuth != null && !su.isValid()) {
                 const data = await response.text(); // Assuming the response is text
                 console.info("Vote Recorded " + data);
                 fetchAndDisplayVotes();
-
+                fetchAndDisplayUser();
 /*                 alert(data); // Show the response in an alert box
  */            } catch (error) {
                 console.error('Error during fetch:', error);
@@ -179,7 +205,7 @@ if (sessionAuth != null && !su.isValid()) {
 <meta charset="utf-8">
 
 <!-- Site Title -->
-<title>Shrine Channel: <%=channel%></title>
+<title>Shrine: <%=channel%></title>
 
 <!--
         Google Fonts
@@ -230,8 +256,13 @@ if (sessionAuth != null && !su.isValid()) {
 				<!-- /responsive nav button -->
 
 				<!-- logo -->
-				<h1 class="navbar-brand">
+				<h1 class="navbar-brand call-to-action p">
 					<a href="<%=JSPConstants.INDEX%>#body"> <img src="img/logo-sm.jpg" alt="Shrine Logo">
+					<%if (su.isValid()) {%>
+						Welcome <%=su.getTwitchUserName()%>
+						Left: <span id="voteRemaining"></span>
+						X:<span id="voteMulti"></span>
+					<%}%>
 					</a>
 				</h1>
 				<!-- /logo -->
@@ -293,7 +324,15 @@ if (sessionAuth != null && !su.isValid()) {
         #service
         ========================== -->
 	<section id="service">
+		<div class="section-title text-center wow fadeInDown">
+			<h2>Channel: <a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>"><%=channel.getTwitchChannel() %></a></h2>
+			<%if(null != userName && userName.length() > 0){ %>
+			<h3>User Filter:<%=userName %></h3>
+			<%}%>
+			
+		</div>
 		<div class="container" id="channelEvent"></div>
+		
 		<!-- end .container -->
 	</section>
 	<!--
@@ -313,7 +352,7 @@ if (sessionAuth != null && !su.isValid()) {
 					</div>
 
 					<div class="footer-social wow fadeInUp">
-						<h3>Ssocial</h3>
+						<h3>Social</h3>
 						<ul class="text-center list-inline">
 							<li><a href="https://www.twitch.tv/shrineoflostsecrets"
 								target="_blank"><i class="fa fa-twitch fa-lg"></i></a></li>
@@ -362,5 +401,4 @@ if (sessionAuth != null && !su.isValid()) {
 	<!-- theme custom scripts -->
 	<script src="js/main.js"></script>
 </body>
-<script></script>
 </html>

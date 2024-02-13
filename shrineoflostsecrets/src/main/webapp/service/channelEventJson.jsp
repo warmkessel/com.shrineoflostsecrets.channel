@@ -19,7 +19,7 @@ JSONArray jsonEvents = new JSONArray();
 
 ShrineChannel shrineChannel = new ShrineChannel();
 shrineChannel.loadShrineChannelName(channel);
-HashMap<String, String> logo = new HashMap();
+HashMap<String, String> logo = new HashMap<String, String>();
 try {
 	List<Entity> listChannels = null;
 	listChannels = ShrineChannelEventServcie.listChanelEvents(requestChannel, userName, serviceType, unlimited);

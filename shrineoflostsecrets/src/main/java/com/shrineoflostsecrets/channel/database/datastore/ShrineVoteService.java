@@ -17,20 +17,27 @@ import com.shrineoflostsecrets.channel.enumerations.ShrineServiceTypeEnum;
 public class ShrineVoteService {
 
 	public static List<Entity> listVotes(String channel, ShrineServiceTypeEnum service) {
+		return listVotes(channel, service, 5);
+	}
+	public static List<Entity> listVotes(String channel, ShrineServiceTypeEnum service, int maxReturnSize) {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 		Query<Entity> query = null;
-		if (service.getSafe()) {
+		if (service.isSafe()) {
 			query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINEVOTE)
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.DELETED, false))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.SAFE, true))
-					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT)).setLimit(5).build();
+					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT))
+					.addOrderBy(OrderBy.desc(TwitchChannelConstants.UPDATEDDATE))
+					.setLimit(5).build();
 
 		} else {
 			query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINEVOTE)
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.DELETED, false))
 					.setFilter(PropertyFilter.eq(TwitchChannelConstants.TWITCHCHANNEL, channel))
-					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT)).setLimit(5).build();
+					.addOrderBy(OrderBy.desc(TwitchChannelConstants.SHRINEVOTEAMOUNT))
+					.addOrderBy(OrderBy.desc(TwitchChannelConstants.UPDATEDDATE))
+					.setLimit(maxReturnSize).build();
 		}
 		// Run the query and retrieve a list of matching entities
 		QueryResults<Entity> results = datastore.run(query);

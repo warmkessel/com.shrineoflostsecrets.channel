@@ -45,7 +45,7 @@ public class ShrineChannelEventServcie {
 
 		// Add filters based on the ban flag
 
-		if (service.getBan()) {
+		if (service.isBan()) {
 			baseFilter = CompositeFilter.and(baseFilter, CompositeFilter.or(
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONUSERBAN),
 					PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONDELETEMESSAGE)));
