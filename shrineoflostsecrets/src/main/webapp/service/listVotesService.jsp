@@ -6,7 +6,10 @@
 response.setHeader("Content-Type", "application/json");
 
 String channel = request.getParameter("channel");
-
+int size = 5;
+if(null != request.getParameter("size") && request.getParameter("size").length() > 0){
+	size = Integer.valueOf(request.getParameter("size"));
+}
 ShrineServiceTypeEnum serviceType = ShrineServiceTypeEnum.findById(request.getParameter("serviceType"));
 
 // Assume ShrineVoteService is a class that abstracts datastore operations
@@ -14,7 +17,7 @@ ShrineServiceTypeEnum serviceType = ShrineServiceTypeEnum.findById(request.getPa
 JSONArray jsonEvents = new JSONArray();
 JSONArray jsonVotes = new JSONArray();
 
-	List<Entity> listVotes = ShrineVoteService.listVotes(((channel != null && !channel.isEmpty()) ? channel : "shrineoflostsecrets"), serviceType);
+	List<Entity> listVotes = ShrineVoteService.listVotes(((channel != null && !channel.isEmpty()) ? channel : "shrineoflostsecrets"), serviceType, size);
 	for (Entity entity : listVotes) {
 		ShrineVote vote = new ShrineVote();
 		vote.loadFromEntity(entity);
@@ -23,7 +26,7 @@ JSONArray jsonVotes = new JSONArray();
 
 		JSONObject jsonVote = new JSONObject();
 		jsonVote.put("amount", vote.getAmount());
-		jsonVote.put("message", channelEvent.getMessage());
+		jsonVote.put("message", StringUtil.slice(channelEvent.getMessage(), JSPConstants.MAXMESSAGELENGTH));
 		jsonVote.put("twitchUser", StringUtil.slice(channelEvent.getTwitchUser(), JSPConstants.MAXUSERNAMELENGTH));
 		jsonVote.put("createdDate", channelEvent.getCreatedDate().toString()); // You may need to format this date
 		jsonVote.put("id", channelEvent.getId());

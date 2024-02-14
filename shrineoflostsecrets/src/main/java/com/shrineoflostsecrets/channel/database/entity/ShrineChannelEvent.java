@@ -5,7 +5,6 @@ import com.google.cloud.datastore.Key;
 import com.shrineoflostsecrets.channel.constants.Constants;
 import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelEventServcie;
-import com.shrineoflostsecrets.channel.database.datastore.ShrineUserService;
 
 public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineChannelEvent> {
 

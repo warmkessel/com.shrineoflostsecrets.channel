@@ -19,6 +19,7 @@ public class JSPConstants {
 	public static final String ADMINSHOW = "/admin/show.jsp";
 	public static final String ADMINCHANNELEVENT = "/admin/channelEvent.jsp";
 
+	public static final int MAXMESSAGELENGTH = 450;
 	public static final int MAXUSERNAMELENGTH = 20;
 	public static final int MINMESSAGESIZE = 20;
 	public static final String IRCCOMMAND = "!";

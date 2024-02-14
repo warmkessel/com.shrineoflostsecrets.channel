@@ -10,17 +10,20 @@ boolean theReturn = false;
 String sessionAuth = (String) request.getSession().getAttribute("auth");
 if(sessionAuth != null && !sessionAuth.isBlank()){
 	long id = Long.valueOf(request.getParameter("id"));
-	boolean safe = Boolean.valueOf(request.getParameter("safe"));
 	String channel = request.getParameter("channel");
 	long amount = Long.valueOf(request.getParameter("amount"));
 	ShrineUser su = new ShrineUser();
 	su.loadShrineUser(sessionAuth);
-	if(su.isValid() && su.canVote()){
-		amount = VoteCaculator.caculateVote(su.vote(amount), su.getVoteMultiplier());		
-		theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
-	}
-
 	
-	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " Channel " + channel + " id " + id + " safe " + safe+ " amount " + amount);
+	if(su.isValid() && su.canVote()){
+		ShrineChannelEvent sce = new ShrineChannelEvent();
+		sce.loadEvent(id);
+		if(sce.isValid()){
+			boolean safe = TwitchChannelConstants.ONCHANNELMESSAGE.equals(sce.getEventType());
+			amount = VoteCaculator.caculateVote(su.vote(amount), su.getVoteMultiplier());		
+			theReturn = ShrineVote.addVote(channel, id, ShrineVoteCategoryEnum.CATEGORY_ONE, amount, sessionAuth);
+			ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " Channel " + channel + " id " + id + " safe " + safe+ " amount " + amount);
+		}
+	}
 }
 %><%=theReturn%>

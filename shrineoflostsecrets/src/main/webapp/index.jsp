@@ -1,7 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
-    pageEncoding="UTF-8"%>
+	pageEncoding="UTF-8"%>
 <%@ page import="java.util.*"%>
-<%@ page import="javax.servlet.http.HttpSession,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.enumerations.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.datastore.*,com.google.cloud.datastore.*"%>
+<%@ page
+	import="javax.servlet.http.HttpSession,com.shrineoflostsecrets.channel.database.entity.*,com.shrineoflostsecrets.channel.util.*,com.shrineoflostsecrets.channel.enumerations.*,com.shrineoflostsecrets.channel.constants.*,com.shrineoflostsecrets.channel.database.datastore.*,com.google.cloud.datastore.*"%>
 <%
 ShrineUser su = new ShrineUser();
 // Check if there is a stored auth value in the session
@@ -9,7 +10,8 @@ String sessionAuth = (String) request.getSession().getAttribute("auth");
 if (sessionAuth != null && !su.isValid()) {
 	// Use the auth from the session if there is no auth in the URL
 	su.loadShrineUser(sessionAuth);
-	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION, "User " + sessionAuth + " at the Index Page");
+	ShrineLog.log(TwitchChannelConstants.SHRINEVOTE, ShrineDebugEnum.PROUCTION,
+	"User " + sessionAuth + " at the Index Page");
 }
 %>
 <!DOCTYPE html>
@@ -22,12 +24,14 @@ if (sessionAuth != null && !su.isValid()) {
 <head>
 <!-- Google tag (gtag.js) -->
 <script async="true"
-    src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
+	src="https://www.googletagmanager.com/gtag/js?id=G-N2VTBWYNCJ"></script>
 <script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'G-N2VTBWYNCJ');
+	window.dataLayer = window.dataLayer || [];
+	function gtag() {
+		dataLayer.push(arguments);
+	}
+	gtag('js', new Date());
+	gtag('config', 'G-N2VTBWYNCJ');
 </script>
 <!-- Mobile Specific Meta -->
 <meta name="viewport" content="width=device-width, initial-scale=1">
@@ -52,7 +56,7 @@ if (sessionAuth != null && !su.isValid()) {
         CSS
         ============================================= -->
 <!-- Fontawesome -->
-<link rel="stylesheet" href="css/font-awesome.min.css">
+<script src="https://kit.fontawesome.com/efcd4206ed.js" crossorigin="anonymous"></script>
 <!-- Bootstrap -->
 <link rel="stylesheet" href="css/bootstrap.min.css">
 <!-- Fancybox -->
@@ -89,7 +93,8 @@ if (sessionAuth != null && !su.isValid()) {
 
 				<!-- logo -->
 				<h1 class="navbar-brand">
-					<a href="#body"> <img src="img/logo-sm.jpg" alt="Shrine Of Lost Secrets Logo">
+					<a href="#body"> <img src="img/logo-sm.jpg"
+						alt="Shrine Of Lost Secrets Logo">
 					</a>
 				</h1>
 				<!-- /logo -->
@@ -104,6 +109,7 @@ if (sessionAuth != null && !su.isValid()) {
 					<li><a href="#channel">Channels</a></li>
 					<li><a href="#voting">Voting</a></li>
 					<li><a href="#contact">Contact</a></li>
+					<li><a href="#contact">Login - Register</a></li>
 				</ul>
 			</nav>
 			<!-- /main nav -->
@@ -133,10 +139,12 @@ if (sessionAuth != null && !su.isValid()) {
 					<div class="carousel-caption">
 						<div class="animated bounceInRight">
 							<h1>
-								Welcome <%= su.getTwitchUserName()%>! <br>The Shrine of Lost Secrets
+								Welcome
+								<%=su.getTwitchUserName()%>! <br>The Shrine of Lost
+								Secrets
 							</h1>
-							<p>The Shrine contains lost secrets, Discover what
-								we hold in our cave of wonders.  Come in and see!</p>
+							<p>The Shrine contains lost secrets, Discover what we hold in
+								our cave of wonders. Come in and see!</p>
 						</div>
 					</div>
 				</div>
@@ -147,7 +155,7 @@ if (sessionAuth != null && !su.isValid()) {
 						<div class="animated bounceInDown">
 							<h2>Sadgirl</h2>
 							<p>
-								<b>Why are u a sad girl?</b> No dad								
+								<b>Why are u a sad girl?</b> No dad
 							</p>
 						</div>
 					</div>
@@ -197,30 +205,39 @@ if (sessionAuth != null && !su.isValid()) {
 			</div>
 			<div class="row">
 
-<%
-	List<Entity> listChanels = ShrineChannelService.listChannels();
-    	for(Entity entity: listChanels) {
-    		ShrineChannel channel = new ShrineChannel();
-    		channel.loadFromEntity(entity);
-    		if(!Constants.SHRINEOFLOSTSECRETS.equals(channel.getTwitchChannel())){
-%>
+				<%
+				List<Entity> listChanels = ShrineChannelService.listChannels();
+				for (Entity entity : listChanels) {
+					ShrineChannel channel = new ShrineChannel();
+					channel.loadFromEntity(entity);
+					if (!Constants.SHRINEOFLOSTSECRETS.equals(channel.getTwitchChannel())) {
+				%>
 				<div class="col-md-6 col-sm-12 wow fadeInLeft">
 					<div class="media">
-						<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>" class="pull-left"><img
+						<a
+							href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>"
+							class="pull-left"><img
 							class="InjectLayout-sc-1i43xsx-0 cXFDOs tw-image tw-image-avatar"
-							alt="<%=channel.getTwitchChannel() %>" alt="Cog"
-							src="<%=channel.getTwitchLogoImg()%>">
-						</a>
+							alt="<%=channel.getTwitchChannel()%>" alt="Cog"
+							src="<%=channel.getTwitchLogoImg()%>"> </a>
 						<div class="media-body">
-							<h3><a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>"><%=StringUtil.capitalizeFirstLetter(channel.getTwitchChannel()) %></a> <%if (channel.isLive()) {%>Live !<%}%></h3>
+							<h3>
+								<a
+									href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>"><%=StringUtil.capitalizeFirstLetter(channel.getTwitchChannel())%></a>
+								<%if (channel.isLive()) {%>Live !<%}%>
+							</h3>
 							<p><%=channel.getTwitchBestQuote()%></p>
-							<a href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel() %>">Enter the Shrine</a>
-							
+							<a
+								href="<%=JSPConstants.CHANNEL%>?channel=<%=channel.getTwitchChannel()%>">Enter
+								the Shrine</a>
+
 						</div>
 					</div>
 				</div>
-<%			}
-    	}%>
+				<%
+				}
+				}
+				%>
 
 			</div>
 			<!-- end .row -->
@@ -382,7 +399,7 @@ if (sessionAuth != null && !su.isValid()) {
 	<!--
         End #voting
         ========================== -->
-   	<!--
+	<!--
         #quotes
         ========================== -->
 	<section id="quotes">
@@ -400,18 +417,23 @@ if (sessionAuth != null && !su.isValid()) {
 	<!--
         End #quotes
         ========================== -->
-        
-        
+
+
 	<!--
-        #contact
+        #login
         ========================== -->
-	<section id="contact">
+	<section id="login">
 		<div class="container">
 			<div class="row">
-
 				<div class="section-title text-center wow fadeInDown">
-					<h2>Contact Us</h2>
-					<p>We would love to talk with you. Find us on <a href="https://www.twitch.tv/shrineoflostsecrets">>Twitch</a></p>
+					<h2>Login / Registration</h2>
+					<p>
+						Our Login / Registration process is very easy. When you Follow us
+						on <a href="https://www.twitch.tv/shrineoflostsecrets">Twitch</a>
+						we will whisper you a link to use which will register you. Your
+						browser will remember that authentication. If for any reason you
+						can use that link in the future to re-login
+					</p>
 				</div>
 			</div>
 		</div>
@@ -419,7 +441,29 @@ if (sessionAuth != null && !su.isValid()) {
 	<!--
         End #contact
         ========================== -->
-
+	<!--
+        #contact
+        ========================== -->
+	<section id="contact">
+		<div class="container">
+			<div class="row">
+				<div class="section-title text-center wow fadeInDown">
+					<h2>Contact Us</h2>
+					<p>
+						We would love to talk with you. Find us on <a
+							href="https://www.twitch.tv/shrineoflostsecrets">Twitch</a>
+					</p>
+					<ul class="text-center list-inline">
+						<li><a href="https://www.twitch.tv/shrineoflostsecrets"
+							target="_blank"><i class="fa fa-twitch fa-2xl"></i></a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</section>
+	<!--
+        End #contact
+        ========================== -->
 	<!--
         #footer
         ========================== -->
@@ -436,14 +480,12 @@ if (sessionAuth != null && !su.isValid()) {
 						<h3>Social</h3>
 						<ul class="text-center list-inline">
 							<li><a href="https://www.twitch.tv/shrineoflostsecrets"
-								target="_blank"><i class="fa fa-twitch fa-lg"></i></a></li>
+								target="_blank"><i class="fa fa-twitch fa-xl"></i></a></li>
 						</ul>
 					</div>
 
 					<div class="copyright">
-						<p>
-							ShrineofLostSecrets 2024
-						</p>
+						<p>ShrineofLostSecrets 2024</p>
 					</div>
 
 				</div>

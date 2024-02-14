@@ -15,10 +15,6 @@ import com.shrineoflostsecrets.channel.constants.TwitchChannelConstants;
 import com.shrineoflostsecrets.channel.enumerations.ShrineServiceTypeEnum;
 
 public class ShrineVoteService {
-
-	public static List<Entity> listVotes(String channel, ShrineServiceTypeEnum service) {
-		return listVotes(channel, service, 5);
-	}
 	public static List<Entity> listVotes(String channel, ShrineServiceTypeEnum service, int maxReturnSize) {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 		Query<Entity> query = null;

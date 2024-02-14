@@ -277,6 +277,8 @@ if (sessionAuth != null && !su.isValid()) {
 					<li class="current"><a href="<%=JSPConstants.INDEX%>#channel">Channels</a></li>
 					<li><a href="<%=JSPConstants.INDEX%>#voting">Voting</a></li>
 					<li><a href="<%=JSPConstants.INDEX%>#contact">Contact</a></li>
+					<li><a href="<%=JSPConstants.INDEX%>#login">Login - Register</a></li>
+					
 				</ul>
 			</nav>
 			<!-- /main nav -->

@@ -93,7 +93,7 @@ public class ShrineCapture extends ServiceAbstract {
 	}
 
 	public void onDeleteMessageEvent(DeleteMessageEvent event) {
-		logger.debug("xxxx Delete");
+		logger.debug("xxxx Delete " + event.getMsgId());
 		log(TwitchChannelConstants.ONDELETEMESSAGE, event.getEventId(), event.getChannel().getName(),
 				event.getUserName(), event.getMessage());
 		logger.debug("xxxx origEvent");
