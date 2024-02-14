@@ -15,6 +15,7 @@ import com.github.twitch4j.eventsub.socket.IEventSubSocket;
 import com.shrineoflostsecrets.channel.collector.Launcher;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 import com.shrineoflostsecrets.channel.database.entity.ShrineUser;
+import com.shrineoflostsecrets.channel.enumerations.BotEnum;
 import com.shrineoflostsecrets.channel.util.OTPGenerator;
 
 public class ShrineResponder extends ServiceAbstract {
@@ -78,8 +79,26 @@ public class ShrineResponder extends ServiceAbstract {
 	public void onChannelMessage(ChannelMessageEvent event) {
 		logger.info("MESSAGE " + event.getUser().getId() + " " + event.getMessage());
 		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName());
+		if(BotEnum.COMMAND.startsWith(event.getMessage())) {
+			processCommand(event);
+		}
 	}
 
+	private void processCommand(ChannelMessageEvent event) {
+	    switch (BotEnum.findById(event.getMessage())) {
+	        case COMMAND:
+	    		logger.info("COMMAND");
+	            break;
+	            
+	        case VOTE:
+	    		logger.info("VOTE");
+	            break;
+	            
+	        case RESPOND:
+	    		logger.info("RESPOND");
+	            break;
+	    }
+	}
 	private void registerUser(FollowEvent event) {
 		String otp = OTPGenerator.generateOTP();
 		ShrineUser su = new ShrineUser();
