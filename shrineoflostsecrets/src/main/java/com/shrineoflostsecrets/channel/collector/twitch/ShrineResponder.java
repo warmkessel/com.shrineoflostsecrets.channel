@@ -11,6 +11,7 @@ import com.github.twitch4j.TwitchClient;
 import com.github.twitch4j.TwitchClientBuilder;
 import com.github.twitch4j.chat.events.channel.ChannelMessageEvent;
 import com.github.twitch4j.chat.events.channel.FollowEvent;
+import com.github.twitch4j.common.events.user.PrivateMessageEvent;
 import com.github.twitch4j.eventsub.socket.IEventSubSocket;
 import com.shrineoflostsecrets.channel.collector.Launcher;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
@@ -61,11 +62,21 @@ public class ShrineResponder extends ServiceAbstract {
 
 		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(FollowEvent.class, this::onFollow);
 
-
+		client.getEventManager().getEventHandler(ReactorEventHandler.class).onEvent(PrivateMessageEvent.class, this::onPrivate);
+		
 		client.getChat().sendMessage("shrineoflostsecrets", "Welcome to the Shrine Of Lost Secrets");
 
 	}
 
+	public void onPrivate(PrivateMessageEvent event) {
+		logger.info("MESSAGE " + event.getUser().getId() + " " + event.getMessage());
+		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName());
+		if(BotEnum.COMMAND.startsWith(event.getMessage())) {
+			processAdminCommand(event);
+		}
+	}
+
+	
 	/**
 	 * Subscribe to the ChannelMessage Event and write the output to the console
 	 */
@@ -89,13 +100,32 @@ public class ShrineResponder extends ServiceAbstract {
 	        case COMMAND:
 	    		logger.info("COMMAND");
 	            break;
-	            
+	         
 	        case VOTE:
 	    		logger.info("VOTE");
+	    		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName() + " Every Vote Counts");
 	            break;
-	            
+
 	        case RESPOND:
 	    		logger.info("RESPOND");
+	    		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName() + " Every Vote Counts");
+	            break;
+	    }
+	}
+	private void processAdminCommand(PrivateMessageEvent event) {
+	    switch (BotEnum.findById(event.getMessage())) {
+	        case COMMAND:
+	    		logger.info("COMMAND");
+	            break;
+	         
+	        case VOTE:
+	    		logger.info("VOTE");
+	    		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName() + " Every Vote Counts");
+	            break;
+
+	        case RESPOND:
+	    		logger.info("RESPOND");
+	    		client.getChat().sendMessage("shrineoflostsecrets", "Hello " + event.getUser().getName() + " Every Vote Counts");
 	            break;
 	    }
 	}

@@ -1,14 +1,14 @@
 package com.shrineoflostsecrets.channel.enumerations;
 
-public enum BotEnum {
+public enum BotAdminEnum {
 	// Enum constants with id, name, and description
-	COMMAND("!"), VOTE("!vote"), DISPLAYVOTE("!vote"), RESPOND("!respond");
+	COMMAND("!"), DISPLAYVOTE("!vote");
 
 	// Fields for the enum properties
 	private final String command;
 
 	// Constructor for enum
-	BotEnum(String command) {
+	BotAdminEnum(String command) {
 		this.command = command;
 	}
 
@@ -26,10 +26,10 @@ public enum BotEnum {
 		return otherCommand.startsWith(COMMAND.getCommand());
 	}
 	// Method to find enum by name, comparing in lowercase
-    public static BotEnum findById(String id) {
+    public static BotAdminEnum findById(String id) {
         if (id != null) {
             String idLower = id.toLowerCase();
-            for (BotEnum value : values()) {
+            for (BotAdminEnum value : values()) {
                 if (value.getCommand().equals(idLower)) {
                     return value;
                 }

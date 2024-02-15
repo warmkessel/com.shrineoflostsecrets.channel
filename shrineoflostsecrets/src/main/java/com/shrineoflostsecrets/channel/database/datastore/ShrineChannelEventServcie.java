@@ -71,10 +71,12 @@ public class ShrineChannelEventServcie {
 		
 		return query;
 	}
-	public static Entity fetchMsgId(String msgId) {
+	public static Entity fetchMsg(String msg) {
 		Datastore datastore = DatastoreOptions.getDefaultInstance().getService();
 		Query<Entity> query = Query.newEntityQueryBuilder().setKind(TwitchChannelConstants.SHRINECHANNELEVENT)
-				.setFilter( PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTID, msgId)).build();
+				.setFilter(  CompositeFilter.and(
+						PropertyFilter.eq(TwitchChannelConstants.TWITCHEVENTTYPE, TwitchChannelConstants.ONCHANNELMESSAGE),
+						PropertyFilter.eq(TwitchChannelConstants.MESSAGE, msg))).build();
 		// Run the query and retrieve a list of matching entities
 		QueryResults<Entity> results = datastore.run(query);
 		List<Entity> entities = Lists.newArrayList(results);

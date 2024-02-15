@@ -2,7 +2,6 @@ package com.shrineoflostsecrets.channel.collector;
 
 import java.io.IOException;
 import java.net.URISyntaxException;
-import java.util.List;
 
 //import oracle.jdbc.OracleDriver;
 import javax.security.auth.login.LoginException;
@@ -11,10 +10,7 @@ import javax.swing.UnsupportedLookAndFeelException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import com.google.cloud.datastore.Entity;
-import com.shrineoflostsecrets.channel.collector.twitch.ShrineCapture;
 import com.shrineoflostsecrets.channel.collector.twitch.ShrineResponder;
-import com.shrineoflostsecrets.channel.database.datastore.ShrineChannelService;
 import com.shrineoflostsecrets.channel.database.entity.ShrineChannel;
 import com.shrineoflostsecrets.channel.util.DebugMode;
 
@@ -50,14 +46,14 @@ public class Launcher {
 		new ShrineResponder(channel);
 		logger.info("ShrineResponder Loaded: {}", channel.getTwitchChannel());
 
-		List<Entity> listChannels = ShrineChannelService.listChannels();
-
-		for (Entity entity : listChannels) {
-			channel = new ShrineChannel();
-			channel.loadFromEntity(entity);
-			new ShrineCapture(channel);
-
-			logger.info("ShrineCapture Loaded: {}", channel.getTwitchChannel());
-		}
+//		List<Entity> listChannels = ShrineChannelService.listChannels();
+//
+//		for (Entity entity : listChannels) {
+//			channel = new ShrineChannel();
+//			channel.loadFromEntity(entity);
+//			new ShrineCapture(channel);
+//
+//			logger.info("ShrineCapture Loaded: {}", channel.getTwitchChannel());
+//		}
 	}
 }

@@ -32,9 +32,9 @@ public class ShrineChannelEvent extends BaseEntity implements Comparable<ShrineC
 	public boolean isValid() {
 		return (getTwitchChannel() != null && getTwitchChannel().length() > 0);
 	}	
-	public void loadShrineOrigEventId(String msgId) {
+	public void loadShrineMessage(String msg) {
 		// log.info("key " + key.toString());
-		loadFromEntity(ShrineChannelEventServcie.fetchMsgId(msgId));
+		loadFromEntity(ShrineChannelEventServcie.fetchMsg(msg));
 
 	}
 	

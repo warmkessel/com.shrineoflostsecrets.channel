@@ -100,7 +100,7 @@ public class ShrineCapture extends ServiceAbstract {
 		ShrineChannelEvent origEvent = new ShrineChannelEvent();
 		
 		logger.debug("xxxx load");
-		origEvent.loadShrineOrigEventId(event.getMsgId());
+		origEvent.loadShrineMessage(event.getMessage());
 		logger.debug("xxxx origEvent.isValid() " + origEvent.isValid());
 
 		if(origEvent.isValid()) {
